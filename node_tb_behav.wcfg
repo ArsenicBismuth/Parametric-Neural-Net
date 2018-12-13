@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="node_tb_behav.wdb" id="1">
+         <top_modules>
+            <top_module name="glbl" />
+            <top_module name="node_tb" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <zoom_setting>
+      <ZoomStartTime time="0fs"></ZoomStartTime>
+      <ZoomEndTime time="69452287fs"></ZoomEndTime>
+      <Cursor1Time time="6478000fs"></Cursor1Time>
+   </zoom_setting>
+   <column_width_setting>
+      <NameColumnWidth column_width="175"></NameColumnWidth>
+      <ValueColumnWidth column_width="126"></ValueColumnWidth>
+   </column_width_setting>
+   <WVObjectSize size="15" />
+   <wvobject fp_name="/node_tb/clk" type="logic">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/node_tb/rst" type="logic">
+      <obj_property name="ElementShortName">rst</obj_property>
+      <obj_property name="ObjectShortName">rst</obj_property>
+   </wvobject>
+   <wvobject type="divider" fp_name="divider151">
+      <obj_property name="label">Inputs</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+   </wvobject>
+   <wvobject fp_name="/node_tb/nx" type="array">
+      <obj_property name="ElementShortName">nx[63:0]</obj_property>
+      <obj_property name="ObjectShortName">nx[63:0]</obj_property>
+      <obj_property name="Radix">REALRADIX</obj_property>
+      <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+      <obj_property name="radix_fractionWidth">24</obj_property>
+      <obj_property name="radix_otherWidth">0</obj_property>
+   </wvobject>
+   <wvobject fp_name="/node_tb/nw" type="array">
+      <obj_property name="ElementShortName">nw[63:0]</obj_property>
+      <obj_property name="ObjectShortName">nw[63:0]</obj_property>
+      <obj_property name="Radix">REALRADIX</obj_property>
+      <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+      <obj_property name="radix_fractionWidth">24</obj_property>
+      <obj_property name="radix_otherWidth">0</obj_property>
+   </wvobject>
+   <wvobject fp_name="/node_tb/b" type="array">
+      <obj_property name="ElementShortName">b[7:-24]</obj_property>
+      <obj_property name="ObjectShortName">b[7:-24]</obj_property>
+      <obj_property name="Radix">REALRADIX</obj_property>
+      <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+      <obj_property name="radix_fractionWidth">24</obj_property>
+      <obj_property name="radix_otherWidth">0</obj_property>
+   </wvobject>
+   <wvobject type="divider" fp_name="divider152">
+      <obj_property name="label">Internals</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+   </wvobject>
+   <wvobject fp_name="/node_tb/x" type="array">
+      <obj_property name="ElementShortName">x[0:1][7:-24]</obj_property>
+      <obj_property name="ObjectShortName">x[0:1][7:-24]</obj_property>
+      <obj_property name="Radix">REALRADIX</obj_property>
+      <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+      <obj_property name="radix_fractionWidth">24</obj_property>
+      <obj_property name="radix_otherWidth">0</obj_property>
+      <wvobject fp_name="/node_tb/x[0]" type="array">
+         <obj_property name="ElementShortName">[0][7:-24]</obj_property>
+         <obj_property name="ObjectShortName">[0][7:-24]</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">24</obj_property>
+         <obj_property name="radix_otherWidth">0</obj_property>
+      </wvobject>
+      <wvobject fp_name="/node_tb/x[1]" type="array">
+         <obj_property name="ElementShortName">[1][7:-24]</obj_property>
+         <obj_property name="ObjectShortName">[1][7:-24]</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">24</obj_property>
+         <obj_property name="radix_otherWidth">0</obj_property>
+      </wvobject>
+      <wvobject fp_name="/node_tb/x[0]" type="array">
+         <obj_property name="ElementShortName">[0][7:-24]</obj_property>
+         <obj_property name="ObjectShortName">[0][7:-24]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/node_tb/x[1]" type="array">
+         <obj_property name="ElementShortName">[1][7:-24]</obj_property>
+         <obj_property name="ObjectShortName">[1][7:-24]</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject fp_name="/node_tb/w" type="array">
+      <obj_property name="ElementShortName">w[0:1][7:-24]</obj_property>
+      <obj_property name="ObjectShortName">w[0:1][7:-24]</obj_property>
+      <obj_property name="Radix">REALRADIX</obj_property>
+      <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+      <obj_property name="radix_fractionWidth">24</obj_property>
+      <obj_property name="radix_otherWidth">0</obj_property>
+      <wvobject fp_name="/node_tb/w[0]" type="array">
+         <obj_property name="ElementShortName">[0][7:-24]</obj_property>
+         <obj_property name="ObjectShortName">[0][7:-24]</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">24</obj_property>
+         <obj_property name="radix_otherWidth">0</obj_property>
+      </wvobject>
+      <wvobject fp_name="/node_tb/w[1]" type="array">
+         <obj_property name="ElementShortName">[1][7:-24]</obj_property>
+         <obj_property name="ObjectShortName">[1][7:-24]</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">24</obj_property>
+         <obj_property name="radix_otherWidth">0</obj_property>
+      </wvobject>
+      <wvobject fp_name="/node_tb/w[0]" type="array">
+         <obj_property name="ElementShortName">[0][7:-24]</obj_property>
+         <obj_property name="ObjectShortName">[0][7:-24]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/node_tb/w[1]" type="array">
+         <obj_property name="ElementShortName">[1][7:-24]</obj_property>
+         <obj_property name="ObjectShortName">[1][7:-24]</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject fp_name="/node_tb/mac" type="array">
+      <obj_property name="ElementShortName">mac[14:-48]</obj_property>
+      <obj_property name="ObjectShortName">mac[14:-48]</obj_property>
+      <obj_property name="Radix">REALRADIX</obj_property>
+      <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+      <obj_property name="radix_fractionWidth">48</obj_property>
+      <obj_property name="radix_otherWidth">0</obj_property>
+   </wvobject>
+   <wvobject fp_name="/node_tb/z" type="array">
+      <obj_property name="ElementShortName">z[7:-24]</obj_property>
+      <obj_property name="ObjectShortName">z[7:-24]</obj_property>
+      <obj_property name="Radix">REALRADIX</obj_property>
+      <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+      <obj_property name="radix_fractionWidth">24</obj_property>
+      <obj_property name="radix_otherWidth">0</obj_property>
+   </wvobject>
+   <wvobject type="divider" fp_name="divider153">
+      <obj_property name="label">Outputs</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+   </wvobject>
+   <wvobject fp_name="/node_tb/y" type="array">
+      <obj_property name="ElementShortName">y[7:-24]</obj_property>
+      <obj_property name="ObjectShortName">y[7:-24]</obj_property>
+      <obj_property name="Radix">REALRADIX</obj_property>
+      <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+      <obj_property name="radix_fractionWidth">24</obj_property>
+      <obj_property name="radix_otherWidth">0</obj_property>
+   </wvobject>
+   <wvobject type="divider" fp_name="divider154">
+      <obj_property name="label">Tests</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+   </wvobject>
+   <wvobject fp_name="group150" type="group">
+      <obj_property name="label">Test</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="isExpanded"></obj_property>
+      <wvobject fp_name="/node_tb/euler" type="other">
+         <obj_property name="ElementShortName">euler</obj_property>
+         <obj_property name="ObjectShortName">euler</obj_property>
+      </wvobject>
+      <wvobject fp_name="/node_tb/ref_mac" type="array">
+         <obj_property name="ElementShortName">ref_mac[14:-48]</obj_property>
+         <obj_property name="ObjectShortName">ref_mac[14:-48]</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">48</obj_property>
+         <obj_property name="radix_otherWidth">0</obj_property>
+      </wvobject>
+      <wvobject fp_name="/node_tb/ref_z" type="array">
+         <obj_property name="ElementShortName">ref_z[7:-24]</obj_property>
+         <obj_property name="ObjectShortName">ref_z[7:-24]</obj_property>
+         <obj_property name="Radix">REALRADIX</obj_property>
+         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
+         <obj_property name="radix_fractionWidth">24</obj_property>
+         <obj_property name="radix_otherWidth">0</obj_property>
+      </wvobject>
+      <wvobject fp_name="/node_tb/ref_y" type="other">
+         <obj_property name="ElementShortName">ref_y</obj_property>
+         <obj_property name="ObjectShortName">ref_y</obj_property>
+      </wvobject>
+      <wvobject fp_name="/node_tb/seed" type="array">
+         <obj_property name="ElementShortName">seed[31:0]</obj_property>
+         <obj_property name="ObjectShortName">seed[31:0]</obj_property>
+      </wvobject>
+   </wvobject>
+</wave_config>

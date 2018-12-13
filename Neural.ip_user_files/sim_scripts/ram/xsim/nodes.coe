@@ -1,0 +1,26 @@
+; End of node is d88 or h58000000
+; Currently: End of node is h888
+memory_initialization_radix=16;
+memory_initialization_vector=
+199999,
+666664,
+FF000000,
+
+4CCCCB,
+7FFFFD,
+FF000000,
+
+999996,
+199999,
+FF000000,
+
+
+B3332F,
+333332,
+14CCCCC,
+FF000000,
+
+333332,
+7FFFFD,
+1199999,
+FF000000;

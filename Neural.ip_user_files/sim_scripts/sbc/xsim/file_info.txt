@@ -1,0 +1,4 @@
+sbc_blk_mem_gen_0_0.v,verilog,xil_defaultlib,../../../bd/sbc/ip/sbc_blk_mem_gen_0_0/sim/sbc_blk_mem_gen_0_0.v,
+sbc_blk_mem_gen_1_0.v,verilog,xil_defaultlib,../../../bd/sbc/ip/sbc_blk_mem_gen_1_0/sim/sbc_blk_mem_gen_1_0.v,
+sbc.v,verilog,xil_defaultlib,../../../bd/sbc/sim/sbc.v,
+glbl.v,Verilog,xil_defaultlib,glbl.v

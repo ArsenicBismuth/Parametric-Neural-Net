@@ -1,0 +1,10 @@
+0.6
+2018.2
+Jun 14 2018
+20:41:02
+D:/Ezeuz/Workbench/Verilog/Neural/Neural.sim/sim_1/behav/xsim/glbl.v,1529022455,verilog,,,,glbl,,,,,,,,
+D:/Ezeuz/Workbench/Verilog/Neural/Neural.srcs/sources_1/new/activation_tb.v,1542083187,verilog,,,,activation_tb,,,,,,,,
+D:/Ezeuz/Workbench/Verilog/Neural/activation.v,1542082172,verilog,,D:/Ezeuz/Workbench/Verilog/Neural/Neural.srcs/sources_1/new/activation_tb.v,,activation,,,,,,,,
+D:/Ezeuz/Workbench/Verilog/Neural/fixed_point.vh,1542097750,verilog,,,,,,,,,,,,
+D:/Ezeuz/Workbench/Verilog/Neural/node.v,1544029965,verilog,,D:/Ezeuz/Workbench/Verilog/Neural/node_tb.v,D:/Ezeuz/Workbench/Verilog/Neural/fixed_point.vh,node,,,../../../../,,,,,
+D:/Ezeuz/Workbench/Verilog/Neural/node_tb.v,1544030126,verilog,,,D:/Ezeuz/Workbench/Verilog/Neural/fixed_point.vh,node_tb,,,../../../../,,,,,

@@ -1,0 +1,22 @@
+D:/Ezeuz/Workbench/ModelSim/Neural/node.v {1 {vlog -work work -nocovercells D:/Ezeuz/Workbench/ModelSim/Neural/node.v
+Model Technology ModelSim ALTERA vlog 6.4a Compiler 2008.08 Oct 22 2008
+-- Compiling module node
+
+Top level modules:
+	node
+
+} {} {}} D:/Ezeuz/Workbench/ModelSim/Neural/activation.v {1 {vlog -work work -nocovercells D:/Ezeuz/Workbench/ModelSim/Neural/activation.v
+Model Technology ModelSim ALTERA vlog 6.4a Compiler 2008.08 Oct 22 2008
+-- Compiling module activation
+
+Top level modules:
+	activation
+
+} {} {}} D:/Ezeuz/Workbench/ModelSim/Neural/node_tb.v {1 {vlog -work work -nocovercells D:/Ezeuz/Workbench/ModelSim/Neural/node_tb.v
+Model Technology ModelSim ALTERA vlog 6.4a Compiler 2008.08 Oct 22 2008
+-- Compiling module node_tb
+
+Top level modules:
+	node_tb
+
+} {} {}}

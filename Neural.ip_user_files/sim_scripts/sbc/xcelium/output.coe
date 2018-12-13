@@ -1,0 +1,18 @@
+; Format {32'h, 32'h, ...}
+; Leftmost hex is the last index
+memory_initialization_radix=16;
+memory_initialization_vector=
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0000000001000000,
+0100000000000000,
+0100000000000000,
+0100000000000000;

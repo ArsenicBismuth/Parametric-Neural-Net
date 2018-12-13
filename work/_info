@@ -1,0 +1,90 @@
+m255
+K3
+13
+cModel Technology
+dD:\Ezeuz\Workbench\ModelSim
+vactivation
+!s100 ;IF@06S:bTh[dNRVU_H5;2
+Ie?`eRBTI7WGBA>^^eLJjd0
+VIU5ZUE@mAzghcZ@QzG`3W0
+Z0 dD:\Ezeuz\Workbench\ModelSim\Neural
+w1540697176
+8D:/Ezeuz/Workbench/ModelSim/Neural/activation.v
+FD:/Ezeuz/Workbench/ModelSim/Neural/activation.v
+L0 5
+Z1 OV;L;6.4a;39
+r1
+!s85 0
+31
+Z2 o-work work -nocovercells -O0
+vmac
+IdcH`C:`n]4D1`G>?eQ[Mk3
+VKbeRj50nRWY?dZ8K>^0NF2
+Z3 dD:\Ezeuz\Workbench\ModelSim\Neural
+Z4 w1540292969
+Z5 8D:/Ezeuz/Workbench/ModelSim/Neural/node.v
+Z6 FD:/Ezeuz/Workbench/ModelSim/Neural/node.v
+L0 69
+R1
+r1
+31
+R2
+!s100 g5@g:YRT3M1f@77k<BB<H0
+!s85 0
+vmap
+I[A0108ciM6_>>YDeZf:ML1
+VIROLKPlZJ6oJc8179OS1`0
+R3
+R4
+R5
+R6
+L0 51
+R1
+r1
+31
+R2
+!s100 b[7P:LfGaP^BhT90TPPlk1
+!s85 0
+vnode
+IHbd3kiV296Sg1@Qm9;Mho3
+VgZY^fe[0:jBKf?5oEU_3h2
+R3
+w1540694444
+R5
+R6
+L0 9
+R1
+r1
+31
+R2
+!s100 72@jZ5EIoH@HGoSQE5WMG0
+!s85 0
+vnode_tb
+I8WI1kU;z2Q@GDMZd9oF>23
+VlP?<5KBj__Q<8nV_3X9JD2
+R3
+w1540908128
+8D:/Ezeuz/Workbench/ModelSim/Neural/node_tb.v
+FD:/Ezeuz/Workbench/ModelSim/Neural/node_tb.v
+L0 4
+R1
+r1
+31
+R2
+!s100 c[Hj;T7L2@^Co]Kd8V]>d1
+!s85 0
+vsigmoid
+IMB=QKEZbIYM76ag8l>;Y51
+VK^C[87Y6G9Zhbm7Q`SI@U2
+R3
+w1540687562
+Factivation.v
+R5
+R6
+L0 5
+R1
+r1
+31
+R2
+!s100 Q;YN>R:TYD82?4EgYUIUm1
+!s85 0
