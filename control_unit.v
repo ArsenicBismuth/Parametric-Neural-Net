@@ -4,7 +4,7 @@
 
 `include "fixed_point.vh"
 
-module control_unit(clk, rst, batch, x_dout, nd_dout, x_addr, y_addr, t_addr, nd_addr, state, e_x, e_y, e_nd, we, x_we, y_we,
+module control_unit(clk, rst, batch, x_addr, y_addr, t_addr, nd_addr, state, e_x, e_y, e_nd, c_we, in_we, x_we, y_we,
                     nd_we, t_we, bp_we, dtb);
   
   parameter ltot = 99;
@@ -29,8 +29,6 @@ module control_unit(clk, rst, batch, x_dout, nd_dout, x_addr, y_addr, t_addr, nd
 
   input clk, rst;
   input signed [n-1:0] batch;
-  input [n*sx-1:0] x_dout;
-  input [n-1:0] nd_dout;
   output reg [a-1:0] x_addr;
   output reg [a-1:0] y_addr;
   output reg [a-1:0] t_addr;
@@ -39,7 +37,8 @@ module control_unit(clk, rst, batch, x_dout, nd_dout, x_addr, y_addr, t_addr, nd
   // Control signals (wires)
   output reg [2:0] state;
   output reg e_x, e_y, e_nd;  // Control signals for memory-to-bus buffers
-  output reg [nd-1:0] we;     // Layer nodes coeffs
+  output reg [nd-1:0] c_we;   // Layer nodes coeffs shift regs & backprop regs
+  output wire in_we;           // Input shift register
   
   output reg [7:0] x_we, y_we, t_we;
   output reg [7:0] nd_we;
@@ -47,11 +46,16 @@ module control_unit(clk, rst, batch, x_dout, nd_dout, x_addr, y_addr, t_addr, nd
   output reg [wt+nd-1:0] bp_we; // One for each constant
   output reg dtb;               // 0: bp_we enable writing to dff, 1: bp_we enable bus buffer
   
+  reg in_loaded;
+  
   // Counters
   integer data;   // Counting the data for an iteration
   integer iterate;
   integer l, d, c;   // Layer, node, and coef counter
   integer ld, ldp;     // Total node in this layer, and prev
+  integer in;       // Input counter
+  
+  assign in_we = ~in_loaded;       
   
   // Control unit
   always @(posedge clk or posedge rst) begin
@@ -59,7 +63,7 @@ module control_unit(clk, rst, batch, x_dout, nd_dout, x_addr, y_addr, t_addr, nd
     
       // Reset
       state = 3'd0;
-      we = {nd{1'b0}};
+      c_we = {nd{1'b0}};
       e_x = 1'b0;
       e_y = 1'b0;
       e_nd = 1'b0;
@@ -78,10 +82,15 @@ module control_unit(clk, rst, batch, x_dout, nd_dout, x_addr, y_addr, t_addr, nd
       l = 0; d = 0; c = 0;
       ld = 0; ldp = 0;
       
+//      in_we = 1'b0;
+      in = 0; 
+      in_loaded = 1'b0;
+      
     end else begin
     
 //      delay = data; // Will assign the clock after
       
+      ////////////////////////////////////////////// Init
       if (state == 3'd0) begin
         $display("[[[Start Loading]]]");
         state = 3'd1;
@@ -91,33 +100,30 @@ module control_unit(clk, rst, batch, x_dout, nd_dout, x_addr, y_addr, t_addr, nd
         nd_addr = {n{1'b0}}; 
       end
         
-      // Load data    
+      ////////////////////////////////////////////// Load coeffs    
       else if (state == 3'd1) begin
-        
-        // Moved to be combinational
-//        ld = lr[l*32 +: 32];  // Get total node in a layer
-        
-//        if (l > 0) ldp = lr[(l-1)*32 +: 32]; 
-//        else ldp = 0;
         
         e_nd = 1'b1; // Weights and biases to bus
         
         if (l == ltot) begin
           // End loading
           state = mode;
-          we = {nd{1'b0}};
+          c_we = {nd{1'b0}};
           e_nd = 1'b0;
           data = -1;
-          x_addr = x_addr + 1'd1;
-          y_addr = y_addr + 1'd1;
-          t_addr = t_addr + 1'd1;
+//          x_addr = x_addr + (1'd1*sx);  // Next input group
+          e_x = 1'b1;          
+          x_addr = x_addr + 1'b1;
+          in = in + 1;          
+          y_addr = y_addr + 1'b1;
+          t_addr = t_addr + 1'b1;
           
           l = 0;
-          $display("[[[State-%1d]]]", state);
+          $display("\n[[[State-%1d]]]", state);
         end else if ((d == ld-1) && (c == ldp+1-1)) begin
           // Until all layers
           nd_addr = nd_addr + 1'd1;
-          we = we >> 1; // Load for next node
+          c_we = c_we >> 1; // Load for next node
           
           d = 0;
           c = 0;
@@ -125,11 +131,11 @@ module control_unit(clk, rst, batch, x_dout, nd_dout, x_addr, y_addr, t_addr, nd
         end else if (c == ldp+1-1) begin
           // Until all nodes in a layer
           nd_addr = nd_addr + 1'd1;
-          we = we >> 1; // Load for next node
+          c_we = c_we >> 1; // Load for next node
           
           c = 0;
           d = d + 1;
-        end else if (we != {nd{1'b0}}) begin
+        end else if (c_we != {nd{1'b0}}) begin
           // Until all coefs in a node
           // Increment node address
           nd_addr = nd_addr + 1'd1;
@@ -137,38 +143,42 @@ module control_unit(clk, rst, batch, x_dout, nd_dout, x_addr, y_addr, t_addr, nd
           c = c + 1;
         end else begin
           // Initalize writing here, compensating memory latency
-          we = 1'b1 << (nd-1);
+          c_we = 1'b1 << (nd-1);
           nd_addr = nd_addr + 1'd1;
         end
       
-      // Feedforward
+      ////////////////////////////////////////////// Feedforward
       end else if (state == 3'd2) begin
               
-        y_we = {8{1'b1}};  // Write last output
+//        y_we = {8{1'b1}};  // Write last output
         
-        // Increment in out address
-        if (x_dout != {{sx*n-12{1'b0}}, 12'h888}) begin   // Continue if not reading 888 (non-frac)
-          x_addr = x_addr + 1'd1;
-          y_addr = y_addr + 1'd1;
-        end
+//        // Increment in out address
+//        if (x_dout != {{sx*n-12{1'b0}}, 12'h888}) begin   // Continue if not reading 888 (non-frac)
+//          x_addr = x_addr + 1'd1;
+//          y_addr = y_addr + 1'd1;
+//        end
         
-      // Backpropagation  
+      ////////////////////////////////////////////// Backpropagation  
       end else if (state == 3'd3) begin
-        
+      
         // Address is separated because 1 clock latency in BRAM
         if (iterate < max_it) begin
           if (data < batch) begin
             $display("[Data-%02d]", x_addr);
-            // Increment in out address
-            x_addr = x_addr + 1'd1;
-            y_addr = y_addr + 1'd1;
-            t_addr = t_addr + 1'd1;
-            
-            // Write calculation to dff
-            dtb = 1'b0;               // 0: bp_we enable writing to dff, 1: bp_we enable bus buffer
-            bp_we = {(wt+nd){1'b1}};  // Enable simultateously, cause one dff is placed for each node
-            
-            data = data + 1;
+            // Loading input
+            in_load(in_loaded);
+            if (in_loaded) begin
+              y_addr = y_addr + 1'd1;
+              t_addr = t_addr + 1'd1;
+              
+              // Write calculation to dff
+              dtb = 1'b0;               // 0: bp_we enable writing to dff, 1: bp_we enable bus buffer
+              bp_we = {(wt+nd){1'b1}};  // Enable simultateously, cause one dff is placed for each node
+              
+              data = data + 1;
+            end else begin
+              bp_we = {(wt+nd){1'b0}};
+            end
           end else begin
             // Reset
             // Should've been next batch addr, because it's end of iteration; not end of epoch.
@@ -186,19 +196,14 @@ module control_unit(clk, rst, batch, x_dout, nd_dout, x_addr, y_addr, t_addr, nd
             l = 1; d = 0; c = -1; // Start on first hidden layer for loading
             nd_addr = {n{1'b0}}; 
             data = 0; 
+            in_loaded = 1'b0;
             
-            $display("[[[State-%1d]]]", state);  
+            $display("\n[[[State-%1d]]]", state);  
           end
         end
         
-      // Save new values
+      ////////////////////////////////////////////// Save new values
       end else if (state == 3'd4) begin
-        
-        // Moved to be combinational
-//        ld = lr[l*32 +: 32];  // Get total node in a layer
-        
-//        if (l > 0) ldp = lr[(l-1)*32 +: 32]; 
-//        else ldp = 0;
         
         dtb = 1'b1;           // to memory (through bus) instead of registers
         nd_we = {8{1'b1}};    // Write new coefs to memory
@@ -253,5 +258,31 @@ module control_unit(clk, rst, batch, x_dout, nd_dout, x_addr, y_addr, t_addr, nd
     if (l > 0) ldp = lr[(l-1)*32 +: 32]; 
     else ldp = 0;
   end
+  
+  
+  // Tasks, executed on separate occassions
+  ////////////////////////////////////////////// Input loading
+  task in_load;
+    output loaded;   // Input group loaded
+    begin
+      if (in == 0) begin
+        loaded = 1'b1;
+        // Direcly write the previous result
+        x_addr = x_addr + 1'b1;
+        e_x = 1'b1;
+        in = in + 1;
+      end else if  (in < sx) begin
+        loaded = 1'b0;
+        x_addr = x_addr + 1'b1;
+        e_x = 1'b1;
+        in = in + 1;
+      end else begin
+//        x_addr = x_addr + 1'b1;
+        loaded = 1'b0;
+//        e_x = 0;
+        in = 0;
+      end
+    end
+  endtask
   
 endmodule

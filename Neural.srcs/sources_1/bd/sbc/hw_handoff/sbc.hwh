@@ -1,23 +1,23 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
-<EDKSYSTEM EDWVERSION="1.2" TIMESTAMP="Tue Dec 11 08:55:46 2018" VIVADOVERSION="2018.2">
+<EDKSYSTEM EDWVERSION="1.2" TIMESTAMP="Sat Dec 15 23:10:33 2018" VIVADOVERSION="2018.2">
 
   <SYSTEMINFO ARCH="zynq" DEVICE="7z010" NAME="sbc" PACKAGE="clg400" SPEEDGRADE="-1"/>
 
   <EXTERNALPORTS>
     <PORT DIR="I" LEFT="8" NAME="BRAM_PORTA_addr" RIGHT="0" SIGIS="undef"/>
     <PORT CLKFREQUENCY="100000000" DIR="I" NAME="BRAM_PORTA_clk" SIGIS="clk"/>
-    <PORT DIR="I" LEFT="63" NAME="BRAM_PORTA_din" RIGHT="0" SIGIS="undef"/>
-    <PORT DIR="O" LEFT="63" NAME="BRAM_PORTA_dout" RIGHT="0" SIGIS="undef"/>
+    <PORT DIR="I" LEFT="31" NAME="BRAM_PORTA_din" RIGHT="0" SIGIS="undef"/>
+    <PORT DIR="O" LEFT="31" NAME="BRAM_PORTA_dout" RIGHT="0" SIGIS="undef"/>
     <PORT DIR="I" NAME="BRAM_PORTA_en" SIGIS="undef"/>
     <PORT DIR="I" NAME="BRAM_PORTA_rst" SIGIS="rst"/>
-    <PORT DIR="I" LEFT="7" NAME="BRAM_PORTA_we" RIGHT="0" SIGIS="undef"/>
+    <PORT DIR="I" LEFT="3" NAME="BRAM_PORTA_we" RIGHT="0" SIGIS="undef"/>
     <PORT DIR="I" LEFT="8" NAME="BRAM_PORTB_addr" RIGHT="0" SIGIS="undef"/>
     <PORT CLKFREQUENCY="100000000" DIR="I" NAME="BRAM_PORTB_clk" SIGIS="clk"/>
-    <PORT DIR="I" LEFT="63" NAME="BRAM_PORTB_din" RIGHT="0" SIGIS="undef"/>
-    <PORT DIR="O" LEFT="63" NAME="BRAM_PORTB_dout" RIGHT="0" SIGIS="undef"/>
+    <PORT DIR="I" LEFT="31" NAME="BRAM_PORTB_din" RIGHT="0" SIGIS="undef"/>
+    <PORT DIR="O" LEFT="31" NAME="BRAM_PORTB_dout" RIGHT="0" SIGIS="undef"/>
     <PORT DIR="I" NAME="BRAM_PORTB_en" SIGIS="undef"/>
     <PORT DIR="I" NAME="BRAM_PORTB_rst" SIGIS="rst"/>
-    <PORT DIR="I" LEFT="7" NAME="BRAM_PORTB_we" RIGHT="0" SIGIS="undef"/>
+    <PORT DIR="I" LEFT="3" NAME="BRAM_PORTB_we" RIGHT="0" SIGIS="undef"/>
     <PORT DIR="I" LEFT="8" NAME="BRAM_PORTA_1_addr" RIGHT="0" SIGIS="undef"/>
     <PORT CLKFREQUENCY="100000000" DIR="I" NAME="BRAM_PORTA_1_clk" SIGIS="clk"/>
     <PORT DIR="I" LEFT="63" NAME="BRAM_PORTA_1_din" RIGHT="0" SIGIS="undef"/>
@@ -126,7 +126,7 @@
         <PARAMETER NAME="C_INIT_FILE_NAME" VALUE="sbc_blk_mem_gen_0_0.mif"/>
         <PARAMETER NAME="C_INIT_FILE" VALUE="NONE"/>
         <PARAMETER NAME="C_USE_DEFAULT_DATA" VALUE="1"/>
-        <PARAMETER NAME="C_DEFAULT_DATA" VALUE="FFFFFFFFFFFFFFFF"/>
+        <PARAMETER NAME="C_DEFAULT_DATA" VALUE="FFFFFFFF"/>
         <PARAMETER NAME="C_HAS_RSTA" VALUE="1"/>
         <PARAMETER NAME="C_RST_PRIORITY_A" VALUE="CE"/>
         <PARAMETER NAME="C_RSTRAM_A" VALUE="0"/>
@@ -134,10 +134,10 @@
         <PARAMETER NAME="C_HAS_ENA" VALUE="1"/>
         <PARAMETER NAME="C_HAS_REGCEA" VALUE="0"/>
         <PARAMETER NAME="C_USE_BYTE_WEA" VALUE="1"/>
-        <PARAMETER NAME="C_WEA_WIDTH" VALUE="8"/>
+        <PARAMETER NAME="C_WEA_WIDTH" VALUE="4"/>
         <PARAMETER NAME="C_WRITE_MODE_A" VALUE="WRITE_FIRST"/>
-        <PARAMETER NAME="C_WRITE_WIDTH_A" VALUE="64"/>
-        <PARAMETER NAME="C_READ_WIDTH_A" VALUE="64"/>
+        <PARAMETER NAME="C_WRITE_WIDTH_A" VALUE="32"/>
+        <PARAMETER NAME="C_READ_WIDTH_A" VALUE="32"/>
         <PARAMETER NAME="C_WRITE_DEPTH_A" VALUE="512"/>
         <PARAMETER NAME="C_READ_DEPTH_A" VALUE="512"/>
         <PARAMETER NAME="C_ADDRA_WIDTH" VALUE="9"/>
@@ -148,10 +148,10 @@
         <PARAMETER NAME="C_HAS_ENB" VALUE="1"/>
         <PARAMETER NAME="C_HAS_REGCEB" VALUE="0"/>
         <PARAMETER NAME="C_USE_BYTE_WEB" VALUE="1"/>
-        <PARAMETER NAME="C_WEB_WIDTH" VALUE="8"/>
+        <PARAMETER NAME="C_WEB_WIDTH" VALUE="4"/>
         <PARAMETER NAME="C_WRITE_MODE_B" VALUE="WRITE_FIRST"/>
-        <PARAMETER NAME="C_WRITE_WIDTH_B" VALUE="64"/>
-        <PARAMETER NAME="C_READ_WIDTH_B" VALUE="64"/>
+        <PARAMETER NAME="C_WRITE_WIDTH_B" VALUE="32"/>
+        <PARAMETER NAME="C_READ_WIDTH_B" VALUE="32"/>
         <PARAMETER NAME="C_WRITE_DEPTH_B" VALUE="512"/>
         <PARAMETER NAME="C_READ_DEPTH_B" VALUE="512"/>
         <PARAMETER NAME="C_ADDRB_WIDTH" VALUE="9"/>
@@ -177,9 +177,9 @@
         <PARAMETER NAME="C_EN_SHUTDOWN_PIN" VALUE="0"/>
         <PARAMETER NAME="C_EN_SAFETY_CKT" VALUE="1"/>
         <PARAMETER NAME="C_DISABLE_WARN_BHV_RANGE" VALUE="0"/>
-        <PARAMETER NAME="C_COUNT_36K_BRAM" VALUE="2"/>
+        <PARAMETER NAME="C_COUNT_36K_BRAM" VALUE="1"/>
         <PARAMETER NAME="C_COUNT_18K_BRAM" VALUE="0"/>
-        <PARAMETER NAME="C_EST_POWER_SUMMARY" VALUE="Estimated Power for IP     :     11.859801 mW"/>
+        <PARAMETER NAME="C_EST_POWER_SUMMARY" VALUE="Estimated Power for IP     :     5.9299 mW"/>
         <PARAMETER NAME="Component_Name" VALUE="sbc_blk_mem_gen_0_0"/>
         <PARAMETER NAME="Interface_Type" VALUE="Native"/>
         <PARAMETER NAME="AXI_Type" VALUE="AXI4_Full"/>
@@ -205,13 +205,13 @@
         <PARAMETER NAME="Algorithm" VALUE="Minimum_Area"/>
         <PARAMETER NAME="Primitive" VALUE="8kx2"/>
         <PARAMETER NAME="Assume_Synchronous_Clk" VALUE="false"/>
-        <PARAMETER NAME="Write_Width_A" VALUE="64"/>
+        <PARAMETER NAME="Write_Width_A" VALUE="32"/>
         <PARAMETER NAME="Write_Depth_A" VALUE="512"/>
-        <PARAMETER NAME="Read_Width_A" VALUE="64"/>
+        <PARAMETER NAME="Read_Width_A" VALUE="32"/>
         <PARAMETER NAME="Operating_Mode_A" VALUE="WRITE_FIRST"/>
         <PARAMETER NAME="Enable_A" VALUE="Use_ENA_Pin"/>
-        <PARAMETER NAME="Write_Width_B" VALUE="64"/>
-        <PARAMETER NAME="Read_Width_B" VALUE="64"/>
+        <PARAMETER NAME="Write_Width_B" VALUE="32"/>
+        <PARAMETER NAME="Read_Width_B" VALUE="32"/>
         <PARAMETER NAME="Operating_Mode_B" VALUE="WRITE_FIRST"/>
         <PARAMETER NAME="Enable_B" VALUE="Use_ENB_Pin"/>
         <PARAMETER NAME="Register_PortA_Output_of_Memory_Primitives" VALUE="true"/>
@@ -226,7 +226,7 @@
         <PARAMETER NAME="Load_Init_File" VALUE="true"/>
         <PARAMETER NAME="Coe_File" VALUE="../../../../../../input.coe"/>
         <PARAMETER NAME="Fill_Remaining_Memory_Locations" VALUE="true"/>
-        <PARAMETER NAME="Remaining_Memory_Locations" VALUE="FFFFFFFFFFFFFFFF"/>
+        <PARAMETER NAME="Remaining_Memory_Locations" VALUE="FFFFFFFF"/>
         <PARAMETER NAME="Use_RSTA_Pin" VALUE="true"/>
         <PARAMETER NAME="Reset_Memory_Latch_A" VALUE="false"/>
         <PARAMETER NAME="Reset_Priority_A" VALUE="CE"/>
@@ -256,17 +256,17 @@
         <PORT DIR="I" NAME="clka" SIGIS="clk"/>
         <PORT DIR="I" NAME="rsta" SIGIS="rst"/>
         <PORT DIR="I" NAME="ena" SIGIS="undef"/>
-        <PORT DIR="I" LEFT="7" NAME="wea" RIGHT="0" SIGIS="undef"/>
+        <PORT DIR="I" LEFT="3" NAME="wea" RIGHT="0" SIGIS="undef"/>
         <PORT DIR="I" LEFT="8" NAME="addra" RIGHT="0" SIGIS="undef"/>
-        <PORT DIR="I" LEFT="63" NAME="dina" RIGHT="0" SIGIS="undef"/>
-        <PORT DIR="O" LEFT="63" NAME="douta" RIGHT="0" SIGIS="undef"/>
+        <PORT DIR="I" LEFT="31" NAME="dina" RIGHT="0" SIGIS="undef"/>
+        <PORT DIR="O" LEFT="31" NAME="douta" RIGHT="0" SIGIS="undef"/>
         <PORT DIR="I" NAME="clkb" SIGIS="clk"/>
         <PORT DIR="I" NAME="rstb" SIGIS="rst"/>
         <PORT DIR="I" NAME="enb" SIGIS="undef"/>
-        <PORT DIR="I" LEFT="7" NAME="web" RIGHT="0" SIGIS="undef"/>
+        <PORT DIR="I" LEFT="3" NAME="web" RIGHT="0" SIGIS="undef"/>
         <PORT DIR="I" LEFT="8" NAME="addrb" RIGHT="0" SIGIS="undef"/>
-        <PORT DIR="I" LEFT="63" NAME="dinb" RIGHT="0" SIGIS="undef"/>
-        <PORT DIR="O" LEFT="63" NAME="doutb" RIGHT="0" SIGIS="undef"/>
+        <PORT DIR="I" LEFT="31" NAME="dinb" RIGHT="0" SIGIS="undef"/>
+        <PORT DIR="O" LEFT="31" NAME="doutb" RIGHT="0" SIGIS="undef"/>
         <PORT DIR="O" NAME="rsta_busy" SIGIS="undef"/>
         <PORT DIR="O" NAME="rstb_busy" SIGIS="undef"/>
       </PORTS>

@@ -202,17 +202,17 @@ proc create_root_design { parentCell } {
    CONFIG.Port_B_Clock {100} \
    CONFIG.Port_B_Enable_Rate {100} \
    CONFIG.Port_B_Write_Rate {50} \
-   CONFIG.Read_Width_A {64} \
-   CONFIG.Read_Width_B {64} \
+   CONFIG.Read_Width_A {32} \
+   CONFIG.Read_Width_B {32} \
    CONFIG.Register_PortA_Output_of_Memory_Primitives {true} \
    CONFIG.Register_PortB_Output_of_Memory_Primitives {true} \
-   CONFIG.Remaining_Memory_Locations {FFFFFFFFFFFFFFFF} \
+   CONFIG.Remaining_Memory_Locations {FFFFFFFF} \
    CONFIG.Use_Byte_Write_Enable {true} \
    CONFIG.Use_RSTA_Pin {true} \
    CONFIG.Use_RSTB_Pin {true} \
    CONFIG.Write_Depth_A {512} \
-   CONFIG.Write_Width_A {64} \
-   CONFIG.Write_Width_B {64} \
+   CONFIG.Write_Width_A {32} \
+   CONFIG.Write_Width_B {32} \
    CONFIG.use_bram_block {Stand_Alone} \
  ] $blk_mem_gen_0
 
