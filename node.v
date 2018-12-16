@@ -60,18 +60,18 @@ module node(nx, nw, b, y, z);
 //  assign y = linear(z);
   
   // Debugging
-  always @(w[0]) begin
-    for (j=0; j<sx; j=j+1) begin
-      $write("x%02d=%.4f | ", j, x[j] * 2.0**-f);
-    end
-    for (j=0; j<sx; j=j+1) begin
-      $write("w%02d=%.4f | ", j, w[j] * 2.0**-f);
-    end
-    $display("");
+//  always @(w[0]) begin
+//    for (j=0; j<sx; j=j+1) begin
+//      $write("x%02d=%.4f | ", j, x[j] * 2.0**-f);
+//    end
+//    for (j=0; j<sx; j=j+1) begin
+//      $write("w%02d=%.4f | ", j, w[j] * 2.0**-f);
+//    end
+//    $display("");
     // Output is uncheckable, because it changes every time, and logically after the loading.
     // Thus at the end of loading, output is yet to be updated.
 //    $display("b=%.4f | z=%.4f | y=%.4f ", b * 2.0**-f, z * 2.0**-f, y * 2.0**-f);
-  end
+//  end
   
   
   

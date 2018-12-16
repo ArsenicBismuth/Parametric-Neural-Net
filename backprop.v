@@ -103,7 +103,7 @@ module backprop(clk, rst, batch, we, dtb, bus, nx, yall, wall, lt, cost);
   dff dcost(clk, (rst | dtb), e_cost, cost + cn, cost);
   
   always @(posedge dtb) begin
-    $display("cost=%.4f", (cost + cn) * 2.0**-f); // Because the last cn is yet to be sum
+    $display("cost=%.4f", cost * 2.0**-f); // Because the last cn is yet to be sum
   end
   
   // Error

@@ -45,9 +45,8 @@ module layer(clk, rst, we, bus, nx, ly, lnw);
   generate
     for (k=0; k<sl; k=k+1) begin : shiftregs
       // Data start from LSB
-//      shift_register #(sx+1+1) sr(clk, rst, we[sl-k-1], bus[n-1:0], data[k]);  // Data for each node, {end, b, nw}.
       shift_register #(sx+1) sr(clk, rst, we[sl-k-1], bus, data[k]);  // Data for each node, {b, nw}.
-//                                                                       Total of sx+1 n-bit data for sx*w and b
+                                                                      // Total of sx+1 n-bit data for sx*w and b
     end
   endgenerate
   
@@ -71,8 +70,7 @@ module layer(clk, rst, we, bus, nx, ly, lnw);
   // Output concenation. Parallel.
   always @(*) begin 
     for (j=0; j<sl; j=j+1) begin
-      // [a +: b] means a offset with b width
-      // Thus first input are the n LSBs 
+      // [a +: b] means a offset with b width, thus first input are the n LSBs 
       ly[j*n +: n] <= y[j];
       lnw[j*n*sx +: n*sx] <= nw[j];
     end

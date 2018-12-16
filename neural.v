@@ -25,13 +25,13 @@ module neural(clk, rst, batch);
   input clk, rst;
   input [n-1:0] batch;  // Number of data each iteration
   
-  wire [n*sx-1:0] bus;  // Bus max width is sx*n, but some (like node) only use n.
+  wire [n-1:0] bus;  // Bus max width is sx*n, but some (like node) only use n.
   
   // Memory wires, see diagram or updated wrapper
   wire [a-1:0] x_addr;
   wire [a-1:0] y_addr;
   wire [a-1:0] t_addr;
-  wire [n*sx-1:0] x_din, x_dout;
+  wire [n-1:0] x_din, x_dout;
   wire [n*sl-1:0] y_din, y_dout;
   wire [n*sl-1:0] t_din, t_dout;
   
@@ -50,8 +50,9 @@ module neural(clk, rst, batch);
   
   // Control signals (wires)
   wire [2:0] state;
-  wire e_x, e_y, e_nd;  // Control signals for memory-to-bus buffers
-  wire [nd-1:0] we;     // Layer nodes coeffs, also another one for backprop mode
+  wire e_x, e_y, e_nd;  // Control signals for memory-to-bus buffers 
+  wire [nd-1:0] c_we;   // Layer nodes coeffs, also another one for backprop mode
+  wire [sx-1:0] in_we;  // Control signals for bus-to-shiftregs
   
   wire [7:0] x_we, y_we, t_we;
   wire [7:0] nd_we;
@@ -61,23 +62,30 @@ module neural(clk, rst, batch);
   
   // Buffers for bus inputs
 //  assign bus = (e_x) ? x_dout : {n*sx{1'bz}}; // Directly to ai_top
-  assign bus = (e_y) ? y_dout : {n*sx{1'bz}};
-  assign bus = (e_nd) ? {{n*(sx-1){1'b0}}, nd_dout} : {n*sx{1'bz}};
+  assign bus = (e_x) ? x_dout : {n{1'bz}};      // Sequential loading
+  assign bus = (e_y) ? y_dout : {n{1'bz}};
+  assign bus = (e_nd) ? nd_dout : {n{1'bz}};
   
   assign x_din = bus;
 //  assign y_din = bus; // Directly from ai_top
   assign nd_din = bus;
   
-  assign nx = x_dout;
+//  assign nx = x_dout; // Not directly anymore
   assign y_din = ly;
   assign lt = t_dout;
   
   // Modules
-  control_unit #(ltot, lr, a, nd, wt) cu(clk, rst, batch, x_dout, nd_dout, x_addr, y_addr, t_addr, nd_addr, state, e_x, e_y, e_nd, we, x_we, y_we,
+  control_unit #(ltot, lr, a, nd, wt) cu(clk, rst, batch, x_addr, y_addr, t_addr, nd_addr, state,
+                                        e_x, e_y, e_nd, c_we, in_we, x_we, y_we,
                                         nd_we, t_we, bp_we, dtb);
-  ai_top #(sx, sl1, sl2, sl, nd, wt) ai(clk, rst, batch, we, bus, nx, ly, yall, wall);
+  ai_top #(sx, sl1, sl2, sl, nd, wt) ai(clk, rst, batch, c_we, bus, nx, ly, yall, wall);
   backprop #(ltot, lr, sx, sl1, sl, nd, wt) bp(clk, rst, batch, bp_we, dtb, bus, nx, yall, wall, lt, cost);
   
+  // Input loading
+  // One register for each input forming one shift reg. Data start from LSB.
+  shift_register #(sx) sr(clk, rst, in_we, bus, nx);  // Total sx amount of input data
+  
+  // RAMs
   ram_wrapper ram_node
     (.BRAM_PORTA_addr(nd_addr),
     .BRAM_PORTA_clk(clk),

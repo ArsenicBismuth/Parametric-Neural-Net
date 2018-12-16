@@ -1,7 +1,7 @@
 //Copyright 1986-2018 Xilinx, Inc. All Rights Reserved.
 //--------------------------------------------------------------------------------
 //Tool Version: Vivado v.2018.2 (win64) Build 2258646 Thu Jun 14 20:03:12 MDT 2018
-//Date        : Thu Dec 13 06:17:21 2018
+//Date        : Sat Dec 15 07:08:49 2018
 //Host        : Ab-1 running 64-bit major release  (build 9200)
 //Command     : generate_target ram_wrapper.bd
 //Design      : ram_wrapper
@@ -24,14 +24,14 @@ module ram_wrapper
     BRAM_PORTB_en,
     BRAM_PORTB_rst,
     BRAM_PORTB_we);
-  input [7:0]BRAM_PORTA_addr;
+  input [12:0]BRAM_PORTA_addr;
   input BRAM_PORTA_clk;
   input [31:0]BRAM_PORTA_din;
   output [31:0]BRAM_PORTA_dout;
   input BRAM_PORTA_en;
   input BRAM_PORTA_rst;
   input [3:0]BRAM_PORTA_we;
-  input [7:0]BRAM_PORTB_addr;
+  input [12:0]BRAM_PORTB_addr;
   input BRAM_PORTB_clk;
   input [31:0]BRAM_PORTB_din;
   output [31:0]BRAM_PORTB_dout;
@@ -39,14 +39,14 @@ module ram_wrapper
   input BRAM_PORTB_rst;
   input [3:0]BRAM_PORTB_we;
 
-  wire [7:0]BRAM_PORTA_addr;
+  wire [12:0]BRAM_PORTA_addr;
   wire BRAM_PORTA_clk;
   wire [31:0]BRAM_PORTA_din;
   wire [31:0]BRAM_PORTA_dout;
   wire BRAM_PORTA_en;
   wire BRAM_PORTA_rst;
   wire [3:0]BRAM_PORTA_we;
-  wire [7:0]BRAM_PORTB_addr;
+  wire [12:0]BRAM_PORTB_addr;
   wire BRAM_PORTB_clk;
   wire [31:0]BRAM_PORTB_din;
   wire [31:0]BRAM_PORTB_dout;
