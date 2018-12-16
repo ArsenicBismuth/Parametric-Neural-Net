@@ -54,6 +54,7 @@ module control_unit(clk, rst, batch, x_addr, y_addr, t_addr, nd_addr, state, e_x
   integer l, d, c;   // Layer, node, and coef counter
   integer ld, ldp;     // Total node in this layer, and prev
   integer in;       // Input counter
+  integer j;
   
   assign in_we = ~in_loaded;       
   
@@ -92,12 +93,14 @@ module control_unit(clk, rst, batch, x_addr, y_addr, t_addr, nd_addr, state, e_x
       
       ////////////////////////////////////////////// Init
       if (state == 3'd0) begin
-        $display("[[[Start Loading]]]");
+        $display("[[Start Loading]]");
         state = 3'd1;
         
         // Initialize for next state
         l = 1; d = 0; c = -1; // Start on first hidden layer for loading
-        nd_addr = {n{1'b0}}; 
+        nd_addr = {n{1'b0}};
+        
+        $display("\n[[[State-%1d]]]", state); 
       end
         
       ////////////////////////////////////////////// Load coeffs    
@@ -115,8 +118,8 @@ module control_unit(clk, rst, batch, x_addr, y_addr, t_addr, nd_addr, state, e_x
           e_x = 1'b1;          
           x_addr = x_addr + 1'b1;
           in = in + 1;          
-          y_addr = y_addr + 1'b1;
-          t_addr = t_addr + 1'b1;
+//          y_addr = y_addr + 1'b1;
+//          t_addr = t_addr + 1'b1;
           
           l = 0;
           $display("\n[[[State-%1d]]]", state);
@@ -164,10 +167,13 @@ module control_unit(clk, rst, batch, x_addr, y_addr, t_addr, nd_addr, state, e_x
         // Address is separated because 1 clock latency in BRAM
         if (iterate < max_it) begin
           if (data < batch) begin
-            $display("[Data-%02d]", x_addr);
+            if (in == 0) $write("[Data-%02d] ", data+1);
+            if (in != 0) $write("x_addr%02d=%4d | ", in, x_addr);
             // Loading input
             in_load(in_loaded);
-            if (in_loaded) begin
+            if (in_loaded) begin 
+              $display("");
+              
               y_addr = y_addr + 1'd1;
               t_addr = t_addr + 1'd1;
               
@@ -218,7 +224,7 @@ module control_unit(clk, rst, batch, x_addr, y_addr, t_addr, nd_addr, state, e_x
           nd_addr = {n{1'b0}};
           
           l = 0;
-          $display("[[[State-%1d]]]", state);
+          $display("\n[[[State-%1d]]]", state);
         end else if ((d == ld-1) && (c == ldp+1-1)) begin
           // Until all layers
           bp_we = bp_we >> 1; // Save for next coef
@@ -269,7 +275,7 @@ module control_unit(clk, rst, batch, x_addr, y_addr, t_addr, nd_addr, state, e_x
         loaded = 1'b1;
         // Direcly write the previous result
         x_addr = x_addr + 1'b1;
-        e_x = 1'b1;
+        e_x = 1'b0;
         in = in + 1;
       end else if  (in < sx) begin
         loaded = 1'b0;
@@ -279,7 +285,7 @@ module control_unit(clk, rst, batch, x_addr, y_addr, t_addr, nd_addr, state, e_x
       end else begin
 //        x_addr = x_addr + 1'b1;
         loaded = 1'b0;
-//        e_x = 0;
+        e_x = 1;
         in = 0;
       end
     end

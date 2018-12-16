@@ -17,7 +17,14 @@ module shift_register(clk, rst, we, x, y);
     if (rst) // Init to zeros
       y <= {m*n{1'b0}};
     else
-      if (we) // Shift right n-bit: n bits of x and m*n - n MSB of prev y
+      if (we) begin // Shift right n-bit: n bits of x and m*n - n MSB of prev y
+        $write("%.4f | ", x * 2.0**-24);
         y <= {x, y[m*n-1:n]};
+      end
+  
+  always @(negedge we) begin
+    $display("");
+  end
+   
   
 endmodule
