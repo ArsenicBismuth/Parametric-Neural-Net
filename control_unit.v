@@ -25,7 +25,7 @@ module control_unit(clk, rst, batch, x_addr, y_addr, t_addr, nd_addr, state, e_x
   localparam f = `f; // Fraction
   localparam i = `i; // Integer
   
-  localparam t0 = {{n-4{1'b0}}, 4'd10}; // The initial address for supervisor, in the output memory
+  localparam t0 = {32'd12001}; // The initial address for supervisor, in the output memory
 
   input clk, rst;
   input signed [n-1:0] batch;
@@ -99,8 +99,8 @@ module control_unit(clk, rst, batch, x_addr, y_addr, t_addr, nd_addr, state, e_x
         l = 1; d = 0; c = -1; // Start on first hidden layer for loading
         nd_addr = {n{1'b0}};
         
-        $display("\n[[[State-%1d]]]", state);
-        $display("[[Start Loading]]"); 
+        $display("[[[State-%1d]]]", state);
+//        $display("[[Start Loading]]"); 
       end
         
       ////////////////////////////////////////////// Load coeffs    
@@ -167,9 +167,11 @@ module control_unit(clk, rst, batch, x_addr, y_addr, t_addr, nd_addr, state, e_x
         // Address is separated because 1 clock latency in BRAM
         if (iterate < max_it) begin
           if (data < batch) begin
-            if (in == 0) $write("[Data-%02d] ", data+1);
-            if (in != 0) $write("x_addr%02d=%4d | ", in, x_addr);
+                      
             // Loading input
+            if (in == 0) $write("[Data-%02d] ", data+1);
+            else $write("x_addr%02d=%4d | ", in, x_addr-1);
+            
             in_load(in_loaded);
             if (in_loaded) begin 
               $display("");
@@ -187,12 +189,12 @@ module control_unit(clk, rst, batch, x_addr, y_addr, t_addr, nd_addr, state, e_x
             end
           end else begin
             // Reset
-            // Should've been next batch addr, because it's end of iteration; not end of epoch.
-            x_addr = 0;
-            y_addr = 0;
-            t_addr = t0;
-            
             iterate = iterate + 1;
+            
+            x_addr = iterate * (batch+1) * sx;
+            y_addr = iterate * (batch+1);
+            t_addr = t0 + iterate * (batch+1);
+            
             $display("[[Iteration=%02d]]", iterate);
             
             // Save learning results
@@ -201,7 +203,8 @@ module control_unit(clk, rst, batch, x_addr, y_addr, t_addr, nd_addr, state, e_x
             nd_we = {8{1'b1}};    // Write new coefs to memory
             dtb = 1'b1;           // to memory (through bus) instead of registers
             l = 1; d = 0; c = -1; // Start on first hidden layer for loading
-            nd_addr = {n{1'b0}}; 
+            nd_addr = {n{1'b0}};
+            in = 0; 
             data = 0; 
             in_loaded = 1'b0;
             
@@ -224,7 +227,7 @@ module control_unit(clk, rst, batch, x_addr, y_addr, t_addr, nd_addr, state, e_x
           nd_addr = {n{1'b0}};
           
           l = 0;
-          $display("\n[[[State-%1d]]]", state);
+          $display("\n\n[[[State-%1d]]]", state);
         end else if ((d == ld-1) && (c == ldp+1-1)) begin
           // Until all layers
           bp_we = bp_we << 1; // Save for next coef
@@ -293,5 +296,5 @@ module control_unit(clk, rst, batch, x_addr, y_addr, t_addr, nd_addr, state, e_x
       end
     end
   endtask
-  
+
 endmodule

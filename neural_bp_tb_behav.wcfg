@@ -11,12 +11,12 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="365450000fs"></ZoomStartTime>
-      <ZoomEndTime time="402650001fs"></ZoomEndTime>
-      <Cursor1Time time="332750000fs"></Cursor1Time>
+      <ZoomStartTime time="2420000fs"></ZoomStartTime>
+      <ZoomEndTime time="3762420001fs"></ZoomEndTime>
+      <Cursor1Time time="1972420000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
-      <NameColumnWidth column_width="175"></NameColumnWidth>
+      <NameColumnWidth column_width="167"></NameColumnWidth>
       <ValueColumnWidth column_width="58"></ValueColumnWidth>
    </column_width_setting>
    <WVObjectSize size="20" />
@@ -119,6 +119,11 @@
          <obj_property name="UseCustomSignalColor">true</obj_property>
          <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
       </wvobject>
+      <wvobject fp_name="/neural_bp_tb/neu/c_we" type="array">
+         <obj_property name="ElementShortName">c_we[14:0]</obj_property>
+         <obj_property name="ObjectShortName">c_we[14:0]</obj_property>
+         <obj_property name="Radix">BINARYRADIX</obj_property>
+      </wvobject>
    </wvobject>
    <wvobject fp_name="group1333" type="group">
       <obj_property name="label">Input Management</obj_property>
@@ -151,8 +156,8 @@
    </wvobject>
    <wvobject fp_name="/neural_bp_tb/neu/ai/lhid1/\nodes[0].nd /x" type="array">
       <obj_property name="DisplayName">label</obj_property>
-      <obj_property name="ElementShortName">x[0:1][7:-24]</obj_property>
-      <obj_property name="ObjectShortName">x[0:1][7:-24]</obj_property>
+      <obj_property name="ElementShortName">x[0:4][7:-24]</obj_property>
+      <obj_property name="ObjectShortName">x[0:4][7:-24]</obj_property>
       <obj_property name="label">x[0:1][7:-24] - 1</obj_property>
       <obj_property name="Radix">REALRADIX</obj_property>
       <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
@@ -163,16 +168,16 @@
       <obj_property name="isExpanded"></obj_property>
    </wvobject>
    <wvobject fp_name="/neural_bp_tb/neu/ai/lhid1/z" type="array">
-      <obj_property name="ElementShortName">z[0:2][7:-24]</obj_property>
-      <obj_property name="ObjectShortName">z[0:2][7:-24]</obj_property>
+      <obj_property name="ElementShortName">z[0:6][7:-24]</obj_property>
+      <obj_property name="ObjectShortName">z[0:6][7:-24]</obj_property>
       <obj_property name="Radix">REALRADIX</obj_property>
       <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
       <obj_property name="radix_fractionWidth">24</obj_property>
       <obj_property name="radix_otherWidth">0</obj_property>
    </wvobject>
    <wvobject fp_name="/neural_bp_tb/neu/ai/lhid2/z" type="array">
-      <obj_property name="ElementShortName">z[0:1][7:-24]</obj_property>
-      <obj_property name="ObjectShortName">z[0:1][7:-24]</obj_property>
+      <obj_property name="ElementShortName">z[0:6][7:-24]</obj_property>
+      <obj_property name="ObjectShortName">z[0:6][7:-24]</obj_property>
       <obj_property name="Radix">REALRADIX</obj_property>
       <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
       <obj_property name="radix_fractionWidth">24</obj_property>
@@ -183,75 +188,14 @@
       <obj_property name="DisplayName">label</obj_property>
    </wvobject>
    <wvobject fp_name="/neural_bp_tb/neu/bp/y" type="array">
-      <obj_property name="ElementShortName">y[0:4][7:-24]</obj_property>
-      <obj_property name="ObjectShortName">y[0:4][7:-24]</obj_property>
+      <obj_property name="ElementShortName">y[0:14][7:-24]</obj_property>
+      <obj_property name="ObjectShortName">y[0:14][7:-24]</obj_property>
       <obj_property name="Radix">REALRADIX</obj_property>
       <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
       <obj_property name="radix_fractionWidth">24</obj_property>
       <obj_property name="radix_otherWidth">0</obj_property>
       <obj_property name="CustomSignalColor">#FAAFBE</obj_property>
       <obj_property name="UseCustomSignalColor">true</obj_property>
-      <obj_property name="isExpanded"></obj_property>
-      <wvobject fp_name="/neural_bp_tb/neu/bp/y[0]" type="array">
-         <obj_property name="ElementShortName">[0][7:-24]</obj_property>
-         <obj_property name="ObjectShortName">[0][7:-24]</obj_property>
-         <obj_property name="Radix">REALRADIX</obj_property>
-         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
-         <obj_property name="radix_fractionWidth">24</obj_property>
-         <obj_property name="radix_otherWidth">0</obj_property>
-      </wvobject>
-      <wvobject fp_name="/neural_bp_tb/neu/bp/y[1]" type="array">
-         <obj_property name="ElementShortName">[1][7:-24]</obj_property>
-         <obj_property name="ObjectShortName">[1][7:-24]</obj_property>
-         <obj_property name="Radix">REALRADIX</obj_property>
-         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
-         <obj_property name="radix_fractionWidth">24</obj_property>
-         <obj_property name="radix_otherWidth">0</obj_property>
-      </wvobject>
-      <wvobject fp_name="/neural_bp_tb/neu/bp/y[2]" type="array">
-         <obj_property name="ElementShortName">[2][7:-24]</obj_property>
-         <obj_property name="ObjectShortName">[2][7:-24]</obj_property>
-         <obj_property name="Radix">REALRADIX</obj_property>
-         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
-         <obj_property name="radix_fractionWidth">24</obj_property>
-         <obj_property name="radix_otherWidth">0</obj_property>
-      </wvobject>
-      <wvobject fp_name="/neural_bp_tb/neu/bp/y[3]" type="array">
-         <obj_property name="ElementShortName">[3][7:-24]</obj_property>
-         <obj_property name="ObjectShortName">[3][7:-24]</obj_property>
-         <obj_property name="Radix">REALRADIX</obj_property>
-         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
-         <obj_property name="radix_fractionWidth">24</obj_property>
-         <obj_property name="radix_otherWidth">0</obj_property>
-      </wvobject>
-      <wvobject fp_name="/neural_bp_tb/neu/bp/y[4]" type="array">
-         <obj_property name="ElementShortName">[4][7:-24]</obj_property>
-         <obj_property name="ObjectShortName">[4][7:-24]</obj_property>
-         <obj_property name="Radix">REALRADIX</obj_property>
-         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
-         <obj_property name="radix_fractionWidth">24</obj_property>
-         <obj_property name="radix_otherWidth">0</obj_property>
-      </wvobject>
-      <wvobject fp_name="/neural_bp_tb/neu/bp/y[0]" type="array">
-         <obj_property name="ElementShortName">[0][7:-24]</obj_property>
-         <obj_property name="ObjectShortName">[0][7:-24]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/neural_bp_tb/neu/bp/y[1]" type="array">
-         <obj_property name="ElementShortName">[1][7:-24]</obj_property>
-         <obj_property name="ObjectShortName">[1][7:-24]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/neural_bp_tb/neu/bp/y[2]" type="array">
-         <obj_property name="ElementShortName">[2][7:-24]</obj_property>
-         <obj_property name="ObjectShortName">[2][7:-24]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/neural_bp_tb/neu/bp/y[3]" type="array">
-         <obj_property name="ElementShortName">[3][7:-24]</obj_property>
-         <obj_property name="ObjectShortName">[3][7:-24]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/neural_bp_tb/neu/bp/y[4]" type="array">
-         <obj_property name="ElementShortName">[4][7:-24]</obj_property>
-         <obj_property name="ObjectShortName">[4][7:-24]</obj_property>
-      </wvobject>
    </wvobject>
    <wvobject type="divider" fp_name="divider998">
       <obj_property name="label">Backprop</obj_property>
@@ -266,8 +210,8 @@
          <obj_property name="DisplayName">label</obj_property>
       </wvobject>
       <wvobject fp_name="/neural_bp_tb/neu/bp/w" type="array">
-         <obj_property name="ElementShortName">w[0:11][7:-24]</obj_property>
-         <obj_property name="ObjectShortName">w[0:11][7:-24]</obj_property>
+         <obj_property name="ElementShortName">w[0:90][7:-24]</obj_property>
+         <obj_property name="ObjectShortName">w[0:90][7:-24]</obj_property>
          <obj_property name="Radix">REALRADIX</obj_property>
          <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
          <obj_property name="radix_fractionWidth">24</obj_property>
@@ -276,16 +220,16 @@
          <obj_property name="UseCustomSignalColor">true</obj_property>
       </wvobject>
       <wvobject fp_name="/neural_bp_tb/neu/bp/b" type="array">
-         <obj_property name="ElementShortName">b[0:4][7:-24]</obj_property>
-         <obj_property name="ObjectShortName">b[0:4][7:-24]</obj_property>
+         <obj_property name="ElementShortName">b[0:14][7:-24]</obj_property>
+         <obj_property name="ObjectShortName">b[0:14][7:-24]</obj_property>
          <obj_property name="Radix">REALRADIX</obj_property>
          <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
          <obj_property name="radix_fractionWidth">24</obj_property>
          <obj_property name="radix_otherWidth">0</obj_property>
       </wvobject>
       <wvobject fp_name="/neural_bp_tb/neu/bp/t" type="array">
-         <obj_property name="ElementShortName">t[0:1][7:-24]</obj_property>
-         <obj_property name="ObjectShortName">t[0:1][7:-24]</obj_property>
+         <obj_property name="ElementShortName">t[0:0][7:-24]</obj_property>
+         <obj_property name="ObjectShortName">t[0:0][7:-24]</obj_property>
          <obj_property name="Radix">REALRADIX</obj_property>
          <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
          <obj_property name="radix_fractionWidth">24</obj_property>
@@ -294,8 +238,8 @@
          <obj_property name="UseCustomSignalColor">true</obj_property>
       </wvobject>
       <wvobject fp_name="/neural_bp_tb/neu/bp/sub" type="array">
-         <obj_property name="ElementShortName">sub[0:1][7:-24]</obj_property>
-         <obj_property name="ObjectShortName">sub[0:1][7:-24]</obj_property>
+         <obj_property name="ElementShortName">sub[0:0][7:-24]</obj_property>
+         <obj_property name="ObjectShortName">sub[0:0][7:-24]</obj_property>
          <obj_property name="Radix">REALRADIX</obj_property>
          <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
          <obj_property name="radix_fractionWidth">24</obj_property>
@@ -304,8 +248,8 @@
          <obj_property name="UseCustomSignalColor">true</obj_property>
       </wvobject>
       <wvobject fp_name="/neural_bp_tb/neu/bp/we" type="array">
-         <obj_property name="ElementShortName">we[16:0]</obj_property>
-         <obj_property name="ObjectShortName">we[16:0]</obj_property>
+         <obj_property name="ElementShortName">we[105:0]</obj_property>
+         <obj_property name="ObjectShortName">we[105:0]</obj_property>
          <obj_property name="Radix">BINARYRADIX</obj_property>
          <obj_property name="CustomSignalColor">#FFFF00</obj_property>
          <obj_property name="UseCustomSignalColor">true</obj_property>
@@ -321,8 +265,8 @@
          <obj_property name="DisplayName">label</obj_property>
       </wvobject>
       <wvobject fp_name="/neural_bp_tb/neu/bp/y_der" type="array">
-         <obj_property name="ElementShortName">y_der[0:4][7:-24]</obj_property>
-         <obj_property name="ObjectShortName">y_der[0:4][7:-24]</obj_property>
+         <obj_property name="ElementShortName">y_der[0:14][7:-24]</obj_property>
+         <obj_property name="ObjectShortName">y_der[0:14][7:-24]</obj_property>
          <obj_property name="Radix">REALRADIX</obj_property>
          <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
          <obj_property name="radix_fractionWidth">24</obj_property>
@@ -331,8 +275,8 @@
          <obj_property name="UseCustomSignalColor">true</obj_property>
       </wvobject>
       <wvobject fp_name="/neural_bp_tb/neu/bp/errw" type="array">
-         <obj_property name="ElementShortName">errw[0:5][7:-24]</obj_property>
-         <obj_property name="ObjectShortName">errw[0:5][7:-24]</obj_property>
+         <obj_property name="ElementShortName">errw[0:55][7:-24]</obj_property>
+         <obj_property name="ObjectShortName">errw[0:55][7:-24]</obj_property>
          <obj_property name="Radix">REALRADIX</obj_property>
          <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
          <obj_property name="radix_fractionWidth">24</obj_property>
@@ -341,8 +285,8 @@
          <obj_property name="UseCustomSignalColor">true</obj_property>
       </wvobject>
       <wvobject fp_name="/neural_bp_tb/neu/bp/errw_sum" type="array">
-         <obj_property name="ElementShortName">errw_sum[0:2][7:-24]</obj_property>
-         <obj_property name="ObjectShortName">errw_sum[0:2][7:-24]</obj_property>
+         <obj_property name="ElementShortName">errw_sum[0:13][7:-24]</obj_property>
+         <obj_property name="ObjectShortName">errw_sum[0:13][7:-24]</obj_property>
          <obj_property name="Radix">REALRADIX</obj_property>
          <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
          <obj_property name="radix_fractionWidth">24</obj_property>
@@ -365,8 +309,8 @@
          <obj_property name="DisplayName">label</obj_property>
       </wvobject>
       <wvobject fp_name="/neural_bp_tb/neu/bp/err" type="array">
-         <obj_property name="ElementShortName">err[0:4][7:-24]</obj_property>
-         <obj_property name="ObjectShortName">err[0:4][7:-24]</obj_property>
+         <obj_property name="ElementShortName">err[0:14][7:-24]</obj_property>
+         <obj_property name="ObjectShortName">err[0:14][7:-24]</obj_property>
          <obj_property name="Radix">REALRADIX</obj_property>
          <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
          <obj_property name="radix_fractionWidth">24</obj_property>
@@ -374,46 +318,6 @@
          <obj_property name="CustomSignalColor">#FAAFBE</obj_property>
          <obj_property name="UseCustomSignalColor">true</obj_property>
          <obj_property name="isExpanded"></obj_property>
-         <wvobject fp_name="/neural_bp_tb/neu/bp/err[0]" type="array">
-            <obj_property name="ElementShortName">[0][7:-24]</obj_property>
-            <obj_property name="ObjectShortName">[0][7:-24]</obj_property>
-            <obj_property name="Radix">REALRADIX</obj_property>
-            <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
-            <obj_property name="radix_fractionWidth">24</obj_property>
-            <obj_property name="radix_otherWidth">0</obj_property>
-         </wvobject>
-         <wvobject fp_name="/neural_bp_tb/neu/bp/err[1]" type="array">
-            <obj_property name="ElementShortName">[1][7:-24]</obj_property>
-            <obj_property name="ObjectShortName">[1][7:-24]</obj_property>
-            <obj_property name="Radix">REALRADIX</obj_property>
-            <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
-            <obj_property name="radix_fractionWidth">24</obj_property>
-            <obj_property name="radix_otherWidth">0</obj_property>
-         </wvobject>
-         <wvobject fp_name="/neural_bp_tb/neu/bp/err[2]" type="array">
-            <obj_property name="ElementShortName">[2][7:-24]</obj_property>
-            <obj_property name="ObjectShortName">[2][7:-24]</obj_property>
-            <obj_property name="Radix">REALRADIX</obj_property>
-            <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
-            <obj_property name="radix_fractionWidth">24</obj_property>
-            <obj_property name="radix_otherWidth">0</obj_property>
-         </wvobject>
-         <wvobject fp_name="/neural_bp_tb/neu/bp/err[3]" type="array">
-            <obj_property name="ElementShortName">[3][7:-24]</obj_property>
-            <obj_property name="ObjectShortName">[3][7:-24]</obj_property>
-            <obj_property name="Radix">REALRADIX</obj_property>
-            <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
-            <obj_property name="radix_fractionWidth">24</obj_property>
-            <obj_property name="radix_otherWidth">0</obj_property>
-         </wvobject>
-         <wvobject fp_name="/neural_bp_tb/neu/bp/err[4]" type="array">
-            <obj_property name="ElementShortName">[4][7:-24]</obj_property>
-            <obj_property name="ObjectShortName">[4][7:-24]</obj_property>
-            <obj_property name="Radix">REALRADIX</obj_property>
-            <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
-            <obj_property name="radix_fractionWidth">24</obj_property>
-            <obj_property name="radix_otherWidth">0</obj_property>
-         </wvobject>
       </wvobject>
       <wvobject fp_name="/neural_bp_tb/neu/bp/cn" type="array">
          <obj_property name="ElementShortName">cn[7:-24]</obj_property>
@@ -436,8 +340,8 @@
          <obj_property name="UseCustomSignalColor">true</obj_property>
       </wvobject>
       <wvobject fp_name="/neural_bp_tb/neu/bp/ea" type="array">
-         <obj_property name="ElementShortName">ea[0:11][7:-24]</obj_property>
-         <obj_property name="ObjectShortName">ea[0:11][7:-24]</obj_property>
+         <obj_property name="ElementShortName">ea[0:90][7:-24]</obj_property>
+         <obj_property name="ObjectShortName">ea[0:90][7:-24]</obj_property>
          <obj_property name="Radix">REALRADIX</obj_property>
          <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
          <obj_property name="radix_fractionWidth">24</obj_property>
@@ -446,32 +350,20 @@
          <obj_property name="UseCustomSignalColor">true</obj_property>
       </wvobject>
       <wvobject fp_name="/neural_bp_tb/neu/bp/dw" type="array">
-         <obj_property name="ElementShortName">dw[0:11][7:-24]</obj_property>
-         <obj_property name="ObjectShortName">dw[0:11][7:-24]</obj_property>
+         <obj_property name="ElementShortName">dw[0:90][7:-24]</obj_property>
+         <obj_property name="ObjectShortName">dw[0:90][7:-24]</obj_property>
          <obj_property name="Radix">REALRADIX</obj_property>
          <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
          <obj_property name="radix_fractionWidth">24</obj_property>
          <obj_property name="radix_otherWidth">0</obj_property>
       </wvobject>
       <wvobject fp_name="/neural_bp_tb/neu/bp/dd" type="array">
-         <obj_property name="ElementShortName">dd[0:4][7:-24]</obj_property>
-         <obj_property name="ObjectShortName">dd[0:4][7:-24]</obj_property>
+         <obj_property name="ElementShortName">dd[0:14][7:-24]</obj_property>
+         <obj_property name="ObjectShortName">dd[0:14][7:-24]</obj_property>
          <obj_property name="Radix">REALRADIX</obj_property>
          <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
          <obj_property name="radix_fractionWidth">24</obj_property>
          <obj_property name="radix_otherWidth">0</obj_property>
-      </wvobject>
-      <wvobject fp_name="/neural_bp_tb/neu/ram_node/ram_i/blk_mem_gen_0/inst/\native_mem_module.blk_mem_gen_v8_4_1_inst /memory" type="array">
-         <obj_property name="DisplayName">label</obj_property>
-         <obj_property name="ElementShortName">memory[0:255][31:0]</obj_property>
-         <obj_property name="ObjectShortName">memory[0:255][31:0]</obj_property>
-         <obj_property name="label">ram[0:255][31:0]</obj_property>
-         <obj_property name="Radix">REALRADIX</obj_property>
-         <obj_property name="radix_realType">SIGNEDFIXEDPOINTRADIX</obj_property>
-         <obj_property name="radix_fractionWidth">24</obj_property>
-         <obj_property name="radix_otherWidth">0</obj_property>
-         <obj_property name="CustomSignalColor">#FAAFBE</obj_property>
-         <obj_property name="UseCustomSignalColor">true</obj_property>
       </wvobject>
    </wvobject>
 </wave_config>

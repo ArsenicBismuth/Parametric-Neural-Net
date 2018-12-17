@@ -55,8 +55,8 @@ module node(nx, nw, b, y, z);
   assign z = mac[i:-f];  // Truncate, only get f fraction and i integer
 
   // Activation function
-//  assign y = relu(z);
-  assign y = sigmoid(z);
+  assign y = relu(z);
+//  assign y = sigmoid(z);
 //  assign y = linear(z);
   
   // Debugging

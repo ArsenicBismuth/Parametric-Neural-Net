@@ -12,15 +12,15 @@ module neural(clk, rst, batch);
   localparam i = `i; // Integer
   
   // Layer params
-  parameter ltot = 3;
-  parameter sx = 2;     
-  parameter sl1 = 3;
-  parameter sl2 = 0;
-  parameter sl = 2;     // Total node of last layer
-  parameter [32*ltot-1:0] lr = {sl, sl1, sx}; // Nodes in a layer, LSB are the input
+  parameter ltot = 4;
+  parameter sx = 5;     
+  parameter sl1 = 7;
+  parameter sl2 = 7;
+  parameter sl = 1;     // Total node of last layer
+  parameter [32*ltot-1:0] lr = {sl, sl2, sl1, sx}; // Nodes in a layer, LSB are the input
   
   localparam nd = sl1+sl2+sl;       // Total all nodes
-  localparam wt = sx*sl1 + sl1*sl;  // Total all weights
+  localparam wt = sx*sl1 + sl1*sl2 + sl2*sl;  // Total all weights
   
   input clk, rst;
   input [n-1:0] batch;  // Number of data each iteration
@@ -80,7 +80,7 @@ module neural(clk, rst, batch);
                                         e_x, e_y, e_nd, c_we, in_we, x_we, y_we,
                                         nd_we, t_we, bp_we, dtb);
   ai_top #(sx, sl1, sl2, sl, nd, wt) ai(clk, rst, batch, c_we, bus, nx, ly, yall, wall, ball);
-  backprop #(ltot, lr, sx, sl1, sl, nd, wt) bp(clk, rst, batch, bp_we, dtb, bus, nx, yall, wall, ball, lt, cost);
+  backprop #(ltot, lr, sx, sl1, sl2, sl, nd, wt) bp(clk, rst, batch, bp_we, dtb, bus, nx, yall, wall, ball, lt, cost);
   
   // Input loading
   // One register for each input forming one shift reg. Data start from LSB.
