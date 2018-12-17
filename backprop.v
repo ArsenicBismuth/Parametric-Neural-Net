@@ -27,7 +27,7 @@ module backprop(clk, rst, batch, we, dtb, bus, nx, yall, wall, ball, lt, cost);
   assign rate = 32'h199999; 
 //  assign rate = 32'h1999; 
   
-  integer j, k, m, o;
+  integer j, k, m, o, p;
   
   input clk, rst;
   input signed [n-1:0] batch;
@@ -159,16 +159,18 @@ module backprop(clk, rst, batch, we, dtb, bus, nx, yall, wall, ball, lt, cost);
     // For every layer, must manually create a new loop
     
     // J moving backward, for every node in this layer
-    for (j=nd-sl-1; j>=nd-sl-sl1; j=j-1) begin
+//    for (j=nd-sl-1; j>=nd-sl-sl1; j=j-1) begin
+    for (j=0; j<sl1; j=j+1) begin
     
       // K moving forward, for every node in prev layer
       errw_sum[j] = {n{1'b0}};
       for (k=0; k<sl; k=k+1) begin
-        m = nd - sl + k;  // Index of the previous layer error
-        o = j*sl + k;     // Index of the weight
-        errw_t[o] = err[m];
-        errw[o] = errw_t[o][i:-f];
-        errw_sum[j] = errw_sum[j] + errw[o];  
+        m = nd - sl + k;   // Index of the previous layer error
+        o = sx*sl1 + j + k*(sx+1); // Index of the weight
+        p = j*sl + k;              // Current, relative weight
+        errw_t[p] = err[m] * w[o];
+        errw[p] = errw_t[p][i:-f];
+        errw_sum[j] = errw_sum[j] + errw[p];  
       end
       
       err_t[j] = errw_sum[j] * y_der[j];
@@ -177,6 +179,8 @@ module backprop(clk, rst, batch, we, dtb, bus, nx, yall, wall, ball, lt, cost);
 //      $display("Error-2: %f", err[j] * 2.0**-f);
     end
     
+    
+    
     //// New value calcs
     
     // New weight calc
@@ -184,21 +188,23 @@ module backprop(clk, rst, batch, we, dtb, bus, nx, yall, wall, ball, lt, cost);
     for (j=0; j<sx; j=j+1) begin
       // K moving forward, for every node in next layer (hidden-1)
       for (k=0; k<sl1; k=k+1) begin
-        o = j*sl1 + k;     // Index of the weight
+        o = j + k*(sx);     // Index of the weight
         ea_t[o] = err[k] * x[j];
         ea[o] = ea_t[o][i:-f];
         eas[o] = deas[o] + ea[o];
-        dw_t[o] = rate * eas[o];
+        
+        dw_t[o] = rate * deas[o];
         dw[o] = dw_t[o][i:-f]; 
       end
     end
     
-    for (j=sx; j<sx+sl1; j=j+1) begin
+    for (j=0; j<sl1; j=j+1) begin
       for (k=0; k<sl; k=k+1) begin
-        o = sx + j*sl + k;     // Index of the weight
-        ea_t[o] = err[k+sl1] * y[j-sx];
+        o = sx*sl1 + j + k*(sl1);     // Index of the weight
+        ea_t[o] = err[k+sl1] * y[j];
         ea[o] = ea_t[o][i:-f];
         eas[o] = deas[o] + ea[o];
+        
         dw_t[o] = rate * deas[o];
         dw[o] = dw_t[o][i:-f];
       end

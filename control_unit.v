@@ -198,6 +198,7 @@ module control_unit(clk, rst, batch, x_addr, y_addr, t_addr, nd_addr, state, e_x
             // Save learning results
             state = 3'd4;
             bp_we = {{(wt+nd-1){1'b0}} ,1'b1};
+            nd_we = {8{1'b1}};    // Write new coefs to memory
             dtb = 1'b1;           // to memory (through bus) instead of registers
             l = 1; d = 0; c = -1; // Start on first hidden layer for loading
             nd_addr = {n{1'b0}}; 
@@ -212,7 +213,6 @@ module control_unit(clk, rst, batch, x_addr, y_addr, t_addr, nd_addr, state, e_x
       end else if (state == 3'd4) begin
         
         dtb = 1'b1;           // to memory (through bus) instead of registers
-        nd_we = {8{1'b1}};    // Write new coefs to memory
         
         if (l == ltot) begin
           // End saving
@@ -272,18 +272,21 @@ module control_unit(clk, rst, batch, x_addr, y_addr, t_addr, nd_addr, state, e_x
     output loaded;   // Input group loaded
     begin
       if (in == 0) begin
+//        in_we = 1'b0;
         loaded = 1'b1;
         // Direcly write the previous result
         x_addr = x_addr + 1'b1;
         e_x = 1'b0;
         in = in + 1;
       end else if  (in < sx) begin
+//        in_we = 1'b1;
         loaded = 1'b0;
         x_addr = x_addr + 1'b1;
         e_x = 1'b1;
         in = in + 1;
       end else begin
 //        x_addr = x_addr + 1'b1;
+//        in_we = 1'b1;
         loaded = 1'b0;
         e_x = 1;
         in = 0;
