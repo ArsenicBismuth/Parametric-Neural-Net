@@ -19,6 +19,7 @@ module control_unit(clk, rst, batch, x_addr, y_addr, t_addr, nd_addr, state, e_x
   
   // Below are params that will be set to signals later
   localparam max_it = 10000;
+  localparam max_in = 6500;   // Total data available
   localparam mode = 3;  // 2 feedforward, 3 backprop
   
   localparam n = `n; // Bit
@@ -50,7 +51,7 @@ module control_unit(clk, rst, batch, x_addr, y_addr, t_addr, nd_addr, state, e_x
   
   // Counters
   integer data;   // Counting the data for an iteration
-  integer iterate;
+  integer epoch, iterate;
   integer l, d, c;   // Layer, node, and coef counter
   integer ld, ldp;     // Total node in this layer, and prev
   integer in;       // Input counter
@@ -79,6 +80,7 @@ module control_unit(clk, rst, batch, x_addr, y_addr, t_addr, nd_addr, state, e_x
       
       data = 0;
 //      delay = 0;
+      epoch = 0;
       iterate = 0;
       l = 0; d = 0; c = 0;
       ld = 0; ldp = 0;
@@ -191,11 +193,20 @@ module control_unit(clk, rst, batch, x_addr, y_addr, t_addr, nd_addr, state, e_x
             // Reset
             iterate = iterate + 1;
             
-            x_addr = iterate * (batch+1) * sx;
-            y_addr = iterate * (batch+1);
-            t_addr = t0 + iterate * (batch+1);
+            // Check if it's almost the limit of data, repeat (one epoch)
+            if (x_addr < max_in) begin
+              x_addr = iterate * (batch+1) * sx;
+              y_addr = iterate * (batch+1);
+              t_addr = t0 + iterate * (batch+1);
+            end else begin
+              epoch = epoch + 1;
+              iterate = 0;
+              x_addr = 0;
+              y_addr = 0;
+              t_addr = t0;
+            end
             
-            $display("[[Iteration=%02d]]", iterate);
+            $display("[[Epoch=%02d Iteration=%02d]]", epoch, iterate);
             
             // Save learning results
             state = 3'd4;

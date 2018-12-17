@@ -4,7 +4,7 @@ module neural_bp_tb();
 
   reg clk, rst;
   
-  neural neu(clk, rst, 4-1);
+  neural neu(clk, rst, 20-1);
   
   localparam T = 10000;
   
