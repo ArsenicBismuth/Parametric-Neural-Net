@@ -158,8 +158,7 @@ module backprop(clk, rst, batch, we, dtb, bus, nx, yall, wall, ball, lt, cost);
     // Hidden layers
     // For every layer, must manually create a new loop
     
-    // J moving backward, for every node in this layer
-//    for (j=nd-sl-1; j>=nd-sl-sl1; j=j-1) begin
+    // J moving forward, for every node in this layer
     for (j=0; j<sl1; j=j+1) begin
     
       // K moving forward, for every node in prev layer

@@ -56,7 +56,7 @@ module control_unit(clk, rst, batch, x_addr, y_addr, t_addr, nd_addr, state, e_x
   integer in;       // Input counter
   integer j;
   
-  assign in_we = ~in_loaded;       
+  assign in_we = ~in_loaded && (state == 3'd3);       
   
   // Control unit
   always @(posedge clk or posedge rst) begin
