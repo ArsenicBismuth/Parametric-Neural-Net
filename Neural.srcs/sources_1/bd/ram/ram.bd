@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
-<bd:repository xmlns:bd="http://www.xilinx.com/bd" bd:BoundaryCRC="0x7FFA545378F947F3" bd:device="xc7z010clg400-1" bd:isValidated="true" bd:synthFlowMode="None" bd:tool_version="2018.2" bd:top="ram" bd:version="1.00.a">
+<bd:repository xmlns:bd="http://www.xilinx.com/bd" bd:BoundaryCRC="0x1A969F6069C3B106" bd:device="xc7z010clg400-1" bd:isValidated="true" bd:synthFlowMode="None" bd:tool_version="2018.2" bd:top="ram" bd:version="1.00.a">
 
   <spirit:component xmlns:spirit="http://www.spiritconsortium.org/XMLSchema/SPIRIT/1685-2009">
     <spirit:vendor>xilinx.com</spirit:vendor>
@@ -131,7 +131,7 @@
           <spirit:configurableElementValue spirit:referenceId="Byte_Size">8</spirit:configurableElementValue>
           <spirit:configurableElementValue spirit:referenceId="Assume_Synchronous_Clk">false</spirit:configurableElementValue>
           <spirit:configurableElementValue spirit:referenceId="Write_Width_A">32</spirit:configurableElementValue>
-          <spirit:configurableElementValue spirit:referenceId="Write_Depth_A">4128</spirit:configurableElementValue>
+          <spirit:configurableElementValue spirit:referenceId="Write_Depth_A">32768</spirit:configurableElementValue>
           <spirit:configurableElementValue spirit:referenceId="Read_Width_A">32</spirit:configurableElementValue>
           <spirit:configurableElementValue spirit:referenceId="Write_Width_B">32</spirit:configurableElementValue>
           <spirit:configurableElementValue spirit:referenceId="Read_Width_B">32</spirit:configurableElementValue>

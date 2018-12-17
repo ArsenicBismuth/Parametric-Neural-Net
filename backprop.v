@@ -8,6 +8,7 @@ module backprop(clk, rst, batch, we, dtb, bus, nx, yall, wall, ball, lt, cost);
   parameter [32*ltot-1:0] lr = 99;
   parameter sx = 99;  // Size of inputs
   parameter sl1 = 99;  // Size of inputs
+  parameter sl2 = 99;  // Size of inputs
   parameter sl = 99;  // Total node of last layer
   
   parameter nd = 99;      // Total all nodes
@@ -24,7 +25,8 @@ module backprop(clk, rst, batch, we, dtb, bus, nx, yall, wall, ball, lt, cost);
   localparam i = `i; // Integer
   
   wire signed [n-1:0] rate;
-  assign rate = 32'h199999; 
+//  assign rate = 32'h199999; // 0,1 
+  assign rate = 32'h4189; // 0,001 
 //  assign rate = 32'h1999; 
   
   integer j, k, m, o, p;
@@ -140,8 +142,8 @@ module backprop(clk, rst, batch, we, dtb, bus, nx, yall, wall, ball, lt, cost);
     
     // Activation derivatives
     for (j=0; j<nd; j=j+1) begin
-      y_der_t[j] <= (({{2*n{1'sb0}}, 1'sb1} << f) - y[j]) * y[j]; // Sigmoid, (1-a)*a
-//      y_der_t[j] = y[j] >= {n{1'b0}} ? ({{2*n{1'b0}}, 1'b1} << 2*f) : {2*n{1'b0}}; // ReLu, step
+//      y_der_t[j] <= (({{2*n{1'sb0}}, 1'sb1} << f) - y[j]) * y[j]; // Sigmoid, (1-a)*a
+      y_der_t[j] = y[j] >= {n{1'b0}} ? ({{2*n{1'b0}}, 1'b1} << 2*f) : {2*n{1'b0}}; // ReLu, step
 //      y_der_t[j] = ({{2*n{1'b0}}, 1'b1} << 2*f);  // Linear, 1
       y_der[j] <= y_der_t[j][i:-f];      
     end
@@ -149,9 +151,8 @@ module backprop(clk, rst, batch, we, dtb, bus, nx, yall, wall, ball, lt, cost);
     // Output layer
     // Start from MSB, the end of the end
     for (j=nd-1; j>=nd-sl; j=j-1) begin
-       err_t[j] = sub[j-sl1] * y_der[j];  // Sub is only sl-width
+       err_t[j] = sub[j-sl1-sl2] * y_der[j];  // Sub is only sl-width
        err[j] = err_t[j][i:-f];
-       
 //       $display("Error-3: %f", err[j] * 2.0**-f);
     end
     
@@ -159,14 +160,33 @@ module backprop(clk, rst, batch, we, dtb, bus, nx, yall, wall, ball, lt, cost);
     // For every layer, must manually create a new loop
     
     // J moving forward, for every node in this layer
-    for (j=0; j<sl1; j=j+1) begin
-    
+    for (j=sl1; j<sl1+sl2; j=j+1) begin
+        
       // K moving forward, for every node in prev layer
       errw_sum[j] = {n{1'b0}};
       for (k=0; k<sl; k=k+1) begin
         m = nd - sl + k;   // Index of the previous layer error
-        o = sx*sl1 + j + k*(sx+1); // Index of the weight
+        o = sx*sl1 + sl1*sl2 + (j-sl1) + k*(sl1+1); // Index of the weight
         p = j*sl + k;              // Current, relative weight
+        errw_t[p] = err[m] * w[o];
+        errw[p] = errw_t[p][i:-f];
+        errw_sum[j] = errw_sum[j] + errw[p];  
+      end
+      
+      err_t[j] = errw_sum[j] * y_der[j];
+      err[j] = err_t[j][i:-f];
+        
+//      $display("Error-2: %f", err[j] * 2.0**-f);
+    end
+    
+    for (j=0; j<sl1; j=j+1) begin
+    
+      // K moving forward, for every node in prev layer
+      errw_sum[j] = {n{1'b0}};
+      for (k=0; k<sl2; k=k+1) begin
+        m = nd - sl - sl2 + k;   // Index of the previous layer error
+        o = sx*sl1 + j + k*(sx+1); // Index of the weight
+        p = j*sl2 + k;              // Current, relative weight
         errw_t[p] = err[m] * w[o];
         errw[p] = errw_t[p][i:-f];
         errw_sum[j] = errw_sum[j] + errw[p];  
@@ -187,7 +207,7 @@ module backprop(clk, rst, batch, we, dtb, bus, nx, yall, wall, ball, lt, cost);
     for (j=0; j<sx; j=j+1) begin
       // K moving forward, for every node in next layer (hidden-1)
       for (k=0; k<sl1; k=k+1) begin
-        o = j + k*(sx);     // Index of the weight
+        o = 0 + j + k*(sx);     // Index of the weight
         ea_t[o] = err[k] * x[j];
         ea[o] = ea_t[o][i:-f];
         eas[o] = deas[o] + ea[o];
@@ -198,9 +218,23 @@ module backprop(clk, rst, batch, we, dtb, bus, nx, yall, wall, ball, lt, cost);
     end
     
     for (j=0; j<sl1; j=j+1) begin
-      for (k=0; k<sl; k=k+1) begin
+      // K moving forward, for every node in next layer (hidden-1)
+      for (k=0; k<sl2; k=k+1) begin
         o = sx*sl1 + j + k*(sl1);     // Index of the weight
         ea_t[o] = err[k+sl1] * y[j];
+        ea[o] = ea_t[o][i:-f];
+        eas[o] = deas[o] + ea[o];
+        
+        dw_t[o] = rate * deas[o];
+        dw[o] = dw_t[o][i:-f]; 
+//        dw[o] = {o[7:0], k[3:0], j[3:0]}; 
+      end
+    end
+    
+    for (j=0; j<sl2; j=j+1) begin
+      for (k=0; k<sl; k=k+1) begin
+        o = sx*sl1 + sl1*sl2 + j + k*(sl2);     // Index of the weight
+        ea_t[o] = err[k+sl1+sl2] * y[j+sl1];
         ea[o] = ea_t[o][i:-f];
         eas[o] = deas[o] + ea[o];
         
@@ -216,24 +250,44 @@ module backprop(clk, rst, batch, we, dtb, bus, nx, yall, wall, ball, lt, cost);
       dd[j] = dd_t[j][i:-f];
     end
     
-    // Buffer to bus
     
-//    for (j=0; j<wt; j=j+1) begin
-//      if (dtb && we[j]) bus = eas[o]
-//      else
-//    end
-
-//    m = 0; o = 0;
-//    for (j=0; j<(sl1+1)*sx; j=j+1) begin
-//      if (j%(sx+1) == 0) begin
-//        bus = dtb && we[j] ? w[j] - dw[j] : {2*n{1'bz}};
+    
+    // Buffer to bus
+//    k = 0; m = 0; o = 0;
+//    for (j=0; j<(sx+1)*sl1; j=j+1) begin
+//      if ((j+1) % (sx+1) != 0) begin
+//        bus <= dtb && we[k] ? w[m] - dw[m] : {2*n{1'bz}};
+//        m = m + 1;
+//        k = k + 1;
 //      end else begin
-//        assign bus = dtb && we[2] ? (-1'b1 << f) - dd[0] : {2*n{1'bz}};
+//        bus <= dtb && we[k] ? b[o] - dd[o] : {2*n{1'bz}};
+//        o = o + 1;
+//        k = k + 1;
 //      end
 //    end
     
-//    for (j=0; j<(sl+1)*sl1; j=j+1) begin
-          
+//    for (j=0; j<(sl1+1)*sl2; j=j+1) begin
+//      if ((j+1) % (sl1+1) != 0) begin
+//        bus = dtb && we[k] ? w[m] - dw[m] : {2*n{1'bz}};
+//        m = m + 1;
+//        k = k + 1;
+//      end else begin
+//        bus = dtb && we[k] ? b[o] - dd[o] : {2*n{1'bz}};
+//        o = o + 1;
+//        k = k + 1;
+//      end
+//    end
+    
+//    for (j=0; j<(sl2+1)*sl; j=j+1) begin
+//      if ((j+1) % (sl2+1) != 0) begin
+//        bus = dtb && we[k] ? w[m] - dw[m] : {2*n{1'bz}};
+//        m = m + 1;
+//        k = k + 1;
+//      end else begin
+//        bus = dtb && we[k] ? b[o] - dd[o] : {2*n{1'bz}};
+//        o = o + 1;
+//        k = k + 1;
+//      end
 //    end
     
   end
@@ -241,23 +295,136 @@ module backprop(clk, rst, batch, we, dtb, bus, nx, yall, wall, ball, lt, cost);
   // So, basically, bias is represented in negative for the formula in LSICon
   // Thus adding to bias means it's more negative.
   
+  // Created using a C program: https://ideone.com/QvFwRf
+  
   assign bus = dtb && we[0] ? w[0] - dw[0] : {2*n{1'bz}};
   assign bus = dtb && we[1] ? w[1] - dw[1] : {2*n{1'bz}};
-  assign bus = dtb && we[2] ? b[0] - dd[0] : {2*n{1'bz}};
-  assign bus = dtb && we[3] ? w[2] - dw[2] : {2*n{1'bz}};
-  assign bus = dtb && we[4] ? w[3] - dw[3] : {2*n{1'bz}};
-  assign bus = dtb && we[5] ? b[1] - dd[1] : {2*n{1'bz}};
-  assign bus = dtb && we[6] ? w[4] - dw[4] : {2*n{1'bz}};
-  assign bus = dtb && we[7] ? w[5] - dw[5] : {2*n{1'bz}};
-  assign bus = dtb && we[8] ? b[2] - dd[2] : {2*n{1'bz}};
+  assign bus = dtb && we[2] ? w[2] - dw[2] : {2*n{1'bz}};
+  assign bus = dtb && we[3] ? w[3] - dw[3] : {2*n{1'bz}};
+  assign bus = dtb && we[4] ? w[4] - dw[4] : {2*n{1'bz}};
+  assign bus = dtb && we[5] ? b[0] - dd[0] : {2*n{1'bz}};
+  assign bus = dtb && we[6] ? w[5] - dw[5] : {2*n{1'bz}};
+  assign bus = dtb && we[7] ? w[6] - dw[6] : {2*n{1'bz}};
+  assign bus = dtb && we[8] ? w[7] - dw[7] : {2*n{1'bz}};
+  assign bus = dtb && we[9] ? w[8] - dw[8] : {2*n{1'bz}};
+  assign bus = dtb && we[10] ? w[9] - dw[9] : {2*n{1'bz}};
+  assign bus = dtb && we[11] ? b[1] - dd[1] : {2*n{1'bz}};
+  assign bus = dtb && we[12] ? w[10] - dw[10] : {2*n{1'bz}};
+  assign bus = dtb && we[13] ? w[11] - dw[11] : {2*n{1'bz}};
+  assign bus = dtb && we[14] ? w[12] - dw[12] : {2*n{1'bz}};
+  assign bus = dtb && we[15] ? w[13] - dw[13] : {2*n{1'bz}};
+  assign bus = dtb && we[16] ? w[14] - dw[14] : {2*n{1'bz}};
+  assign bus = dtb && we[17] ? b[2] - dd[2] : {2*n{1'bz}};
+  assign bus = dtb && we[18] ? w[15] - dw[15] : {2*n{1'bz}};
+  assign bus = dtb && we[19] ? w[16] - dw[16] : {2*n{1'bz}};
+  assign bus = dtb && we[20] ? w[17] - dw[17] : {2*n{1'bz}};
+  assign bus = dtb && we[21] ? w[18] - dw[18] : {2*n{1'bz}};
+  assign bus = dtb && we[22] ? w[19] - dw[19] : {2*n{1'bz}};
+  assign bus = dtb && we[23] ? b[3] - dd[3] : {2*n{1'bz}};
+  assign bus = dtb && we[24] ? w[20] - dw[20] : {2*n{1'bz}};
+  assign bus = dtb && we[25] ? w[21] - dw[21] : {2*n{1'bz}};
+  assign bus = dtb && we[26] ? w[22] - dw[22] : {2*n{1'bz}};
+  assign bus = dtb && we[27] ? w[23] - dw[23] : {2*n{1'bz}};
+  assign bus = dtb && we[28] ? w[24] - dw[24] : {2*n{1'bz}};
+  assign bus = dtb && we[29] ? b[4] - dd[4] : {2*n{1'bz}};
+  assign bus = dtb && we[30] ? w[25] - dw[25] : {2*n{1'bz}};
+  assign bus = dtb && we[31] ? w[26] - dw[26] : {2*n{1'bz}};
+  assign bus = dtb && we[32] ? w[27] - dw[27] : {2*n{1'bz}};
+  assign bus = dtb && we[33] ? w[28] - dw[28] : {2*n{1'bz}};
+  assign bus = dtb && we[34] ? w[29] - dw[29] : {2*n{1'bz}};
+  assign bus = dtb && we[35] ? b[5] - dd[5] : {2*n{1'bz}};
+  assign bus = dtb && we[36] ? w[30] - dw[30] : {2*n{1'bz}};
+  assign bus = dtb && we[37] ? w[31] - dw[31] : {2*n{1'bz}};
+  assign bus = dtb && we[38] ? w[32] - dw[32] : {2*n{1'bz}};
+  assign bus = dtb && we[39] ? w[33] - dw[33] : {2*n{1'bz}};
+  assign bus = dtb && we[40] ? w[34] - dw[34] : {2*n{1'bz}};
+  assign bus = dtb && we[41] ? b[6] - dd[6] : {2*n{1'bz}};
   
-  assign bus = dtb && we[9] ? w[6] - dw[6] : {2*n{1'bz}};
-  assign bus = dtb && we[10] ? w[7] - dw[7] : {2*n{1'bz}};
-  assign bus = dtb && we[11] ? w[8] - dw[8] : {2*n{1'bz}};
-  assign bus = dtb && we[12] ? b[3] - dd[3] : {2*n{1'bz}};
-  assign bus = dtb && we[13] ? w[9] - dw[9] : {2*n{1'bz}};
-  assign bus = dtb && we[14] ? w[10] - dw[10] : {2*n{1'bz}};
-  assign bus = dtb && we[15] ? w[11] - dw[11] : {2*n{1'bz}};
-  assign bus = dtb && we[16] ? b[4] - dd[4] : {2*n{1'bz}};
+  assign bus = dtb && we[42] ? w[35] - dw[35] : {2*n{1'bz}};
+  assign bus = dtb && we[43] ? w[36] - dw[36] : {2*n{1'bz}};
+  assign bus = dtb && we[44] ? w[37] - dw[37] : {2*n{1'bz}};
+  assign bus = dtb && we[45] ? w[38] - dw[38] : {2*n{1'bz}};
+  assign bus = dtb && we[46] ? w[39] - dw[39] : {2*n{1'bz}};
+  assign bus = dtb && we[47] ? w[40] - dw[40] : {2*n{1'bz}};
+  assign bus = dtb && we[48] ? w[41] - dw[41] : {2*n{1'bz}};
+  assign bus = dtb && we[49] ? b[7] - dd[7] : {2*n{1'bz}};
+  assign bus = dtb && we[50] ? w[42] - dw[42] : {2*n{1'bz}};
+  assign bus = dtb && we[51] ? w[43] - dw[43] : {2*n{1'bz}};
+  assign bus = dtb && we[52] ? w[44] - dw[44] : {2*n{1'bz}};
+  assign bus = dtb && we[53] ? w[45] - dw[45] : {2*n{1'bz}};
+  assign bus = dtb && we[54] ? w[46] - dw[46] : {2*n{1'bz}};
+  assign bus = dtb && we[55] ? w[47] - dw[47] : {2*n{1'bz}};
+  assign bus = dtb && we[56] ? w[48] - dw[48] : {2*n{1'bz}};
+  assign bus = dtb && we[57] ? b[8] - dd[8] : {2*n{1'bz}};
+  assign bus = dtb && we[58] ? w[49] - dw[49] : {2*n{1'bz}};
+  assign bus = dtb && we[59] ? w[50] - dw[50] : {2*n{1'bz}};
+  assign bus = dtb && we[60] ? w[51] - dw[51] : {2*n{1'bz}};
+  assign bus = dtb && we[61] ? w[52] - dw[52] : {2*n{1'bz}};
+  assign bus = dtb && we[62] ? w[53] - dw[53] : {2*n{1'bz}};
+  assign bus = dtb && we[63] ? w[54] - dw[54] : {2*n{1'bz}};
+  assign bus = dtb && we[64] ? w[55] - dw[55] : {2*n{1'bz}};
+  assign bus = dtb && we[65] ? b[9] - dd[9] : {2*n{1'bz}};
+  assign bus = dtb && we[66] ? w[56] - dw[56] : {2*n{1'bz}};
+  assign bus = dtb && we[67] ? w[57] - dw[57] : {2*n{1'bz}};
+  assign bus = dtb && we[68] ? w[58] - dw[58] : {2*n{1'bz}};
+  assign bus = dtb && we[69] ? w[59] - dw[59] : {2*n{1'bz}};
+  assign bus = dtb && we[70] ? w[60] - dw[60] : {2*n{1'bz}};
+  assign bus = dtb && we[71] ? w[61] - dw[61] : {2*n{1'bz}};
+  assign bus = dtb && we[72] ? w[62] - dw[62] : {2*n{1'bz}};
+  assign bus = dtb && we[73] ? b[10] - dd[10] : {2*n{1'bz}};
+  assign bus = dtb && we[74] ? w[63] - dw[63] : {2*n{1'bz}};
+  assign bus = dtb && we[75] ? w[64] - dw[64] : {2*n{1'bz}};
+  assign bus = dtb && we[76] ? w[65] - dw[65] : {2*n{1'bz}};
+  assign bus = dtb && we[77] ? w[66] - dw[66] : {2*n{1'bz}};
+  assign bus = dtb && we[78] ? w[67] - dw[67] : {2*n{1'bz}};
+  assign bus = dtb && we[79] ? w[68] - dw[68] : {2*n{1'bz}};
+  assign bus = dtb && we[80] ? w[69] - dw[69] : {2*n{1'bz}};
+  assign bus = dtb && we[81] ? b[11] - dd[11] : {2*n{1'bz}};
+  assign bus = dtb && we[82] ? w[70] - dw[70] : {2*n{1'bz}};
+  assign bus = dtb && we[83] ? w[71] - dw[71] : {2*n{1'bz}};
+  assign bus = dtb && we[84] ? w[72] - dw[72] : {2*n{1'bz}};
+  assign bus = dtb && we[85] ? w[73] - dw[73] : {2*n{1'bz}};
+  assign bus = dtb && we[86] ? w[74] - dw[74] : {2*n{1'bz}};
+  assign bus = dtb && we[87] ? w[75] - dw[75] : {2*n{1'bz}};
+  assign bus = dtb && we[88] ? w[76] - dw[76] : {2*n{1'bz}};
+  assign bus = dtb && we[89] ? b[12] - dd[12] : {2*n{1'bz}};
+  assign bus = dtb && we[90] ? w[77] - dw[77] : {2*n{1'bz}};
+  assign bus = dtb && we[91] ? w[78] - dw[78] : {2*n{1'bz}};
+  assign bus = dtb && we[92] ? w[79] - dw[79] : {2*n{1'bz}};
+  assign bus = dtb && we[93] ? w[80] - dw[80] : {2*n{1'bz}};
+  assign bus = dtb && we[94] ? w[81] - dw[81] : {2*n{1'bz}};
+  assign bus = dtb && we[95] ? w[82] - dw[82] : {2*n{1'bz}};
+  assign bus = dtb && we[96] ? w[83] - dw[83] : {2*n{1'bz}};
+  assign bus = dtb && we[97] ? b[13] - dd[13] : {2*n{1'bz}};
+  
+  assign bus = dtb && we[98] ? w[84] - dw[84] : {2*n{1'bz}};
+  assign bus = dtb && we[99] ? w[85] - dw[85] : {2*n{1'bz}};
+  assign bus = dtb && we[100] ? w[86] - dw[86] : {2*n{1'bz}};
+  assign bus = dtb && we[101] ? w[87] - dw[87] : {2*n{1'bz}};
+  assign bus = dtb && we[102] ? w[88] - dw[88] : {2*n{1'bz}};
+  assign bus = dtb && we[103] ? w[89] - dw[89] : {2*n{1'bz}};
+  assign bus = dtb && we[104] ? w[90] - dw[90] : {2*n{1'bz}};
+  assign bus = dtb && we[105] ? b[14] - dd[14] : {2*n{1'bz}};
+  
+//  assign bus = dtb && we[0] ? w[0] - dw[0] : {2*n{1'bz}};
+//  assign bus = dtb && we[1] ? w[1] - dw[1] : {2*n{1'bz}};
+//  assign bus = dtb && we[2] ? b[0] - dd[0] : {2*n{1'bz}};
+//  assign bus = dtb && we[3] ? w[2] - dw[2] : {2*n{1'bz}};
+//  assign bus = dtb && we[4] ? w[3] - dw[3] : {2*n{1'bz}};
+//  assign bus = dtb && we[5] ? b[1] - dd[1] : {2*n{1'bz}};
+//  assign bus = dtb && we[6] ? w[4] - dw[4] : {2*n{1'bz}};
+//  assign bus = dtb && we[7] ? w[5] - dw[5] : {2*n{1'bz}};
+//  assign bus = dtb && we[8] ? b[2] - dd[2] : {2*n{1'bz}};
+  
+//  assign bus = dtb && we[9] ? w[6] - dw[6] : {2*n{1'bz}};
+//  assign bus = dtb && we[10] ? w[7] - dw[7] : {2*n{1'bz}};
+//  assign bus = dtb && we[11] ? w[8] - dw[8] : {2*n{1'bz}};
+//  assign bus = dtb && we[12] ? b[3] - dd[3] : {2*n{1'bz}};
+//  assign bus = dtb && we[13] ? w[9] - dw[9] : {2*n{1'bz}};
+//  assign bus = dtb && we[14] ? w[10] - dw[10] : {2*n{1'bz}};
+//  assign bus = dtb && we[15] ? w[11] - dw[11] : {2*n{1'bz}};
+//  assign bus = dtb && we[16] ? b[4] - dd[4] : {2*n{1'bz}};
+    
+    
     
 endmodule

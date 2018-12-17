@@ -81,7 +81,7 @@ input wire ena;
 (* X_INTERFACE_INFO = "xilinx.com:interface:bram:1.0 BRAM_PORTA WE" *)
 input wire [3 : 0] wea;
 (* X_INTERFACE_INFO = "xilinx.com:interface:bram:1.0 BRAM_PORTA ADDR" *)
-input wire [8 : 0] addra;
+input wire [14 : 0] addra;
 (* X_INTERFACE_INFO = "xilinx.com:interface:bram:1.0 BRAM_PORTA DIN" *)
 input wire [31 : 0] dina;
 (* X_INTERFACE_PARAMETER = "XIL_INTERFACENAME BRAM_PORTA, MEM_SIZE 128, MEM_WIDTH 64, MEM_ECC NONE, MASTER_TYPE OTHER, READ_WRITE_MODE READ_WRITE" *)
@@ -96,7 +96,7 @@ input wire enb;
 (* X_INTERFACE_INFO = "xilinx.com:interface:bram:1.0 BRAM_PORTB WE" *)
 input wire [3 : 0] web;
 (* X_INTERFACE_INFO = "xilinx.com:interface:bram:1.0 BRAM_PORTB ADDR" *)
-input wire [8 : 0] addrb;
+input wire [14 : 0] addrb;
 (* X_INTERFACE_INFO = "xilinx.com:interface:bram:1.0 BRAM_PORTB DIN" *)
 input wire [31 : 0] dinb;
 (* X_INTERFACE_PARAMETER = "XIL_INTERFACENAME BRAM_PORTB, MEM_SIZE 128, MEM_WIDTH 64, MEM_ECC NONE, MASTER_TYPE OTHER, READ_WRITE_MODE READ_WRITE" *)
@@ -137,9 +137,9 @@ output wire rstb_busy;
     .C_WRITE_MODE_A("WRITE_FIRST"),
     .C_WRITE_WIDTH_A(32),
     .C_READ_WIDTH_A(32),
-    .C_WRITE_DEPTH_A(512),
-    .C_READ_DEPTH_A(512),
-    .C_ADDRA_WIDTH(9),
+    .C_WRITE_DEPTH_A(32768),
+    .C_READ_DEPTH_A(32768),
+    .C_ADDRA_WIDTH(15),
     .C_HAS_RSTB(1),
     .C_RST_PRIORITY_B("CE"),
     .C_RSTRAM_B(0),
@@ -151,9 +151,9 @@ output wire rstb_busy;
     .C_WRITE_MODE_B("WRITE_FIRST"),
     .C_WRITE_WIDTH_B(32),
     .C_READ_WIDTH_B(32),
-    .C_WRITE_DEPTH_B(512),
-    .C_READ_DEPTH_B(512),
-    .C_ADDRB_WIDTH(9),
+    .C_WRITE_DEPTH_B(32768),
+    .C_READ_DEPTH_B(32768),
+    .C_ADDRB_WIDTH(15),
     .C_HAS_MEM_OUTPUT_REGS_A(1),
     .C_HAS_MEM_OUTPUT_REGS_B(1),
     .C_HAS_MUX_OUTPUT_REGS_A(0),
@@ -176,9 +176,9 @@ output wire rstb_busy;
     .C_EN_SHUTDOWN_PIN(0),
     .C_EN_SAFETY_CKT(1),
     .C_DISABLE_WARN_BHV_RANGE(0),
-    .C_COUNT_36K_BRAM("1"),
+    .C_COUNT_36K_BRAM("32"),
     .C_COUNT_18K_BRAM("0"),
-    .C_EST_POWER_SUMMARY("Estimated Power for IP     :     5.9299 mW")
+    .C_EST_POWER_SUMMARY("Estimated Power for IP     :     20.388 mW")
   ) inst (
     .clka(clka),
     .rsta(rsta),

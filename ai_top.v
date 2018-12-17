@@ -44,24 +44,26 @@ module ai_top(clk, rst, batch, we, bus, nx, ly, yall, wall, ball);
   layer #(sx, sl1) lhid1(clk, rst, we[up1:dn1], bus, nx, ly1, lnw1, lb1);
   
   localparam up2 = dn1-1;
-  localparam dn2 = up2-sl+1;
+  localparam dn2 = up2-sl2+1;
+  // Concatenation of output, weights, and biases in this layer
+  wire [n*sl2-1:0] ly2;
+  wire [n*sl1*sl2-1:0] lnw2;
+  wire [n*sl2-1:0] lb2;
+  layer #(sl1, sl2) lhid2(clk, rst, we[up2:dn2], bus, ly1, ly2, lnw2, lb2);
+  
+  localparam up3 = dn2-1;
+  localparam dn3 = up3-sl+1;
   // Concatenation of output, weights, and biases in this layer
   output [n*sl-1:0] ly;
-  wire [n*sl1*sl-1:0] lnw;
+  wire [n*sl2*sl-1:0] lnw;
   wire [n*sl-1:0] lb;
-  layer #(sl1, sl) lhid2(clk, rst, we[up2:dn2], bus, ly1, ly, lnw, lb);
-  
-//  localparam up3 = dn2-1;
-//  localparam dn3 = up3-sl+1;
-//  output [n*sl-1:0] ly;  // Concatenation of sl amount of y
-//  wire [n*sl-1:0] lz;    // Concatenation of sl amount of z
-//  layer #(sl2, sl) lout(clk, rst, we[up3:dn3], bus, ly2, ly, lz);
+  layer #(sl2, sl) lout(clk, rst, we[up3:dn3], bus, ly2, ly, lnw, lb);
   
   // Wiring used for backprop
   // LSBs (right) are the frontmost layers (left).
   // Layer defines the LSBs as the first data (top node). 
-  output [n*nd-1:0] yall; assign yall = {ly, ly1};
-  output [n*wt-1:0] wall; assign wall = {lnw, lnw1};
-  output [n*nd-1:0] ball; assign ball = {lb, lb1};
+  output [n*nd-1:0] yall; assign yall = {ly, ly2, ly1};
+  output [n*wt-1:0] wall; assign wall = {lnw, lnw2, lnw1};
+  output [n*nd-1:0] ball; assign ball = {lb, lb2, lb1};
     
 endmodule
