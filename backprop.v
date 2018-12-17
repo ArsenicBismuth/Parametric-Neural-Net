@@ -2,7 +2,7 @@
 
 `include "fixed_point.vh"
 
-module backprop(clk, rst, batch, we, dtb, bus, nx, yall, wall, lt, cost);
+module backprop(clk, rst, batch, we, dtb, bus, nx, yall, wall, ball, lt, cost);
 
   parameter ltot = 99;
   parameter [32*ltot-1:0] lr = 99;
@@ -37,6 +37,7 @@ module backprop(clk, rst, batch, we, dtb, bus, nx, yall, wall, lt, cost);
   input [n*sx-1:0] nx;
   input [n*nd-1:0] yall;
   input [n*wt-1:0] wall;
+  input [n*nd-1:0] ball;
   input [n*sl-1:0] lt;
   output signed [i:-f] cost;  // Real register
     
@@ -44,6 +45,7 @@ module backprop(clk, rst, batch, we, dtb, bus, nx, yall, wall, lt, cost);
   reg signed [i:-f] x [0:sx-1];  // Separated yall into array of sx x
   reg signed [i:-f] y [0:nd-1];  // Separated yall into array of nd y
   reg signed [i:-f] w [0:wt-1];  // Separated wall into array of wt w
+  reg signed [i:-f] b [0:nd-1];  // Separated ball into array of nd b
   reg signed [i:-f] t [0:sl-1];  // Separated lt into array of sl t
   
   // Separating inputs. Parallel.
@@ -55,20 +57,11 @@ module backprop(clk, rst, batch, we, dtb, bus, nx, yall, wall, lt, cost);
       x[j] <= nx[j*n +: n];
     end
     
-    for (j=0; j<nd; j=j+1) begin
-      // n LSBs are the first data
-      y[j] <= yall[j*n +: n];
-    end
-    
-    for (j=0; j<wt; j=j+1) begin
-      // n LSBs are the first data
-      w[j] <= wall[j*n +: n];
-    end
-    
-    for (j=0; j<sl; j=j+1) begin
-      // n LSBs are the first data
-      t[j] <= lt[j*n +: n];
-    end
+    // n LSBs are the first data
+    for (j=0; j<nd; j=j+1) y[j] <= yall[j*n +: n];
+    for (j=0; j<wt; j=j+1) w[j] <= wall[j*n +: n];
+    for (j=0; j<nd; j=j+1) b[j] <= ball[j*n +: n];
+    for (j=0; j<sl; j=j+1) t[j] <= lt[j*n +: n];
   end
   
   // Cost function
@@ -225,8 +218,13 @@ module backprop(clk, rst, batch, we, dtb, bus, nx, yall, wall, lt, cost);
 //      else
 //    end
 
+//    m = 0; o = 0;
 //    for (j=0; j<(sl1+1)*sx; j=j+1) begin
-//      bus = dtb && we[j] ? w[j] - dw[j] : {2*n{1'bz}};
+//      if (j%(sx+1) == 0) begin
+//        bus = dtb && we[j] ? w[j] - dw[j] : {2*n{1'bz}};
+//      end else begin
+//        assign bus = dtb && we[2] ? (-1'b1 << f) - dd[0] : {2*n{1'bz}};
+//      end
 //    end
     
 //    for (j=0; j<(sl+1)*sl1; j=j+1) begin
@@ -240,21 +238,21 @@ module backprop(clk, rst, batch, we, dtb, bus, nx, yall, wall, lt, cost);
   
   assign bus = dtb && we[0] ? w[0] - dw[0] : {2*n{1'bz}};
   assign bus = dtb && we[1] ? w[1] - dw[1] : {2*n{1'bz}};
-  assign bus = dtb && we[2] ? (-1'b1 << f) - dd[0] : {2*n{1'bz}};
+  assign bus = dtb && we[2] ? b[0] - dd[0] : {2*n{1'bz}};
   assign bus = dtb && we[3] ? w[2] - dw[2] : {2*n{1'bz}};
   assign bus = dtb && we[4] ? w[3] - dw[3] : {2*n{1'bz}};
-  assign bus = dtb && we[5] ? (-1'b1 << f) - dd[1] : {2*n{1'bz}};
+  assign bus = dtb && we[5] ? b[1] - dd[1] : {2*n{1'bz}};
   assign bus = dtb && we[6] ? w[4] - dw[4] : {2*n{1'bz}};
   assign bus = dtb && we[7] ? w[5] - dw[5] : {2*n{1'bz}};
-  assign bus = dtb && we[8] ? (-1'b1 << f) - dd[2] : {2*n{1'bz}};
+  assign bus = dtb && we[8] ? b[2] - dd[2] : {2*n{1'bz}};
   
   assign bus = dtb && we[9] ? w[6] - dw[6] : {2*n{1'bz}};
   assign bus = dtb && we[10] ? w[7] - dw[7] : {2*n{1'bz}};
   assign bus = dtb && we[11] ? w[8] - dw[8] : {2*n{1'bz}};
-  assign bus = dtb && we[12] ? (-1'b1 << f) - dd[3] : {2*n{1'bz}};
+  assign bus = dtb && we[12] ? b[3] - dd[3] : {2*n{1'bz}};
   assign bus = dtb && we[13] ? w[9] - dw[9] : {2*n{1'bz}};
   assign bus = dtb && we[14] ? w[10] - dw[10] : {2*n{1'bz}};
   assign bus = dtb && we[15] ? w[11] - dw[11] : {2*n{1'bz}};
-  assign bus = dtb && we[16] ? (-1'b1 << f) - dd[4] : {2*n{1'bz}};
+  assign bus = dtb && we[16] ? b[4] - dd[4] : {2*n{1'bz}};
     
 endmodule

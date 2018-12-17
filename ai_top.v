@@ -10,7 +10,7 @@
  *   multiple nodes with their shift registers
  */
 
-module ai_top(clk, rst, batch, we, bus, nx, ly, yall, wall);
+module ai_top(clk, rst, batch, we, bus, nx, ly, yall, wall, ball);
 
   parameter sx = 99;      // Size of inputs
   parameter sl1 = 99;
@@ -37,15 +37,19 @@ module ai_top(clk, rst, batch, we, bus, nx, ly, yall, wall);
   // Layers, last (output using ly) is output layer. Rest are hidden layers.
   localparam up1 = nd-1;
   localparam dn1 = up1-sl1+1;
-  wire [n*sl1-1:0] ly1;  // Concatenation of sl amount of y1
-  wire [n*sx*sl1-1:0] lnw1;  // Concatenation of sl amount of z1
-  layer #(sx, sl1) lhid1(clk, rst, we[up1:dn1], bus, nx, ly1, lnw1);
+  // Concatenation of output, weights, and biases in this layer
+  wire [n*sl1-1:0] ly1;
+  wire [n*sx*sl1-1:0] lnw1;
+  wire [n*sl1-1:0] lb1;
+  layer #(sx, sl1) lhid1(clk, rst, we[up1:dn1], bus, nx, ly1, lnw1, lb1);
   
   localparam up2 = dn1-1;
   localparam dn2 = up2-sl+1;
-  output [n*sl-1:0] ly;  // Concatenation of sl amount of y
-  wire [n*sl1*sl-1:0] lnw;    // Concatenation of sl amount of z
-  layer #(sl1, sl) lhid2(clk, rst, we[up2:dn2], bus, ly1, ly, lnw);
+  // Concatenation of output, weights, and biases in this layer
+  output [n*sl-1:0] ly;
+  wire [n*sl1*sl-1:0] lnw;
+  wire [n*sl-1:0] lb;
+  layer #(sl1, sl) lhid2(clk, rst, we[up2:dn2], bus, ly1, ly, lnw, lb);
   
 //  localparam up3 = dn2-1;
 //  localparam dn3 = up3-sl+1;
@@ -58,5 +62,6 @@ module ai_top(clk, rst, batch, we, bus, nx, ly, yall, wall);
   // Layer defines the LSBs as the first data (top node). 
   output [n*nd-1:0] yall; assign yall = {ly, ly1};
   output [n*wt-1:0] wall; assign wall = {lnw, lnw1};
+  output [n*nd-1:0] ball; assign ball = {lb, lb1};
     
 endmodule

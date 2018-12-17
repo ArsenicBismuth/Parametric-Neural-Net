@@ -45,6 +45,7 @@ module neural(clk, rst, batch);
   
   wire [n*nd-1:0] yall;
   wire [n*wt-1:0] wall;
+  wire [n*nd-1:0] ball;
   
   wire [n-1:0] cost;
   
@@ -78,8 +79,8 @@ module neural(clk, rst, batch);
   control_unit #(ltot, lr, a, nd, wt) cu(clk, rst, batch, x_addr, y_addr, t_addr, nd_addr, state,
                                         e_x, e_y, e_nd, c_we, in_we, x_we, y_we,
                                         nd_we, t_we, bp_we, dtb);
-  ai_top #(sx, sl1, sl2, sl, nd, wt) ai(clk, rst, batch, c_we, bus, nx, ly, yall, wall);
-  backprop #(ltot, lr, sx, sl1, sl, nd, wt) bp(clk, rst, batch, bp_we, dtb, bus, nx, yall, wall, lt, cost);
+  ai_top #(sx, sl1, sl2, sl, nd, wt) ai(clk, rst, batch, c_we, bus, nx, ly, yall, wall, ball);
+  backprop #(ltot, lr, sx, sl1, sl, nd, wt) bp(clk, rst, batch, bp_we, dtb, bus, nx, yall, wall, ball, lt, cost);
   
   // Input loading
   // One register for each input forming one shift reg. Data start from LSB.

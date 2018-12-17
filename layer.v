@@ -4,7 +4,7 @@
 
 // TODO: Remove extra shift register (variable data) that contains
 
-module layer(clk, rst, we, bus, nx, ly, lnw);
+module layer(clk, rst, we, bus, nx, ly, lnw, lb);
 
   // Warning, parameter here is only the default value. 
   // Check the parent if there's any override.
@@ -25,6 +25,7 @@ module layer(clk, rst, we, bus, nx, ly, lnw);
   // Connections (not registers)
   output reg signed [n*sl-1:0] ly;  // Concatenation of sl amount of a
   output reg signed [n*sx*sl-1:0] lnw;  // Concatenation of node amount of weights
+  output reg signed [n*sl-1:0] lb;  // Concatenation of sl amount of biases
   
   // Parameter for each node, in array.
 //  wire signed [n*(sx+1+1)-1:0] data [0:sl-1];  // Data for each node, {end, b, nw}. FIX THE LOADING MECHANISM SO THAT THIS ISN'T NECESSARY
@@ -73,6 +74,7 @@ module layer(clk, rst, we, bus, nx, ly, lnw);
       // [a +: b] means a offset with b width, thus first input are the n LSBs 
       ly[j*n +: n] <= y[j];
       lnw[j*n*sx +: n*sx] <= nw[j];
+      lb[j*n +: n] <= b[j];
     end
   end
     
