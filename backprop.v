@@ -14,13 +14,10 @@ module backprop(clk, rst, batch, we, dtb, bus, nx, yall, wall, lt, cost);
   parameter wt = 99;      // Total all weights
 //  parameter signed rate = 32'h199999;  //0.1
   
-//  localparam sx =  lr[0*32 +: 32];      // Size of inputs
-////  localparam sx =  2;      // Size of inputs
+//  localparam sx = lr[0*32 +: 32];      // Size of inputs
 //  localparam sl1 = lr[1*32 +: 32];
-////  localparam sl1 = 3;
 //  localparam sl2 = 0;
 //  localparam sl = lr[2*32 +: 32];      // Total node of last layer
-//  localparam sl = 2;      // Total node of last layer
   
   localparam n = `n; // Bit
   localparam f = `f; // Fraction
@@ -227,27 +224,37 @@ module backprop(clk, rst, batch, we, dtb, bus, nx, yall, wall, lt, cost);
 //      if (dtb && we[j]) bus = eas[o]
 //      else
 //    end
+
+//    for (j=0; j<(sl1+1)*sx; j=j+1) begin
+//      bus = dtb && we[j] ? w[j] - dw[j] : {2*n{1'bz}};
+//    end
+    
+//    for (j=0; j<(sl+1)*sl1; j=j+1) begin
+          
+//    end
     
   end
   
   // So, basically, bias is represented in negative for the formula in LSICon
   // Thus adding to bias means it's more negative.
-  assign bus = dtb && we[16] ? w[0] - dw[0] : {2*n{1'bz}};
-  assign bus = dtb && we[15] ? w[1] - dw[1] : {2*n{1'bz}};
-  assign bus = dtb && we[14] ? (-1'b1 << f) - dd[0] : {2*n{1'bz}};
-  assign bus = dtb && we[13] ? w[2] - dw[2] : {2*n{1'bz}};
-  assign bus = dtb && we[12] ? w[3] - dw[3] : {2*n{1'bz}};
-  assign bus = dtb && we[11] ? (-1'b1 << f) - dd[1] : {2*n{1'bz}};
-  assign bus = dtb && we[10] ? w[4] - dw[4] : {2*n{1'bz}};
-  assign bus = dtb && we[9] ? w[5] - dw[5] : {2*n{1'bz}};
+  
+  assign bus = dtb && we[0] ? w[0] - dw[0] : {2*n{1'bz}};
+  assign bus = dtb && we[1] ? w[1] - dw[1] : {2*n{1'bz}};
+  assign bus = dtb && we[2] ? (-1'b1 << f) - dd[0] : {2*n{1'bz}};
+  assign bus = dtb && we[3] ? w[2] - dw[2] : {2*n{1'bz}};
+  assign bus = dtb && we[4] ? w[3] - dw[3] : {2*n{1'bz}};
+  assign bus = dtb && we[5] ? (-1'b1 << f) - dd[1] : {2*n{1'bz}};
+  assign bus = dtb && we[6] ? w[4] - dw[4] : {2*n{1'bz}};
+  assign bus = dtb && we[7] ? w[5] - dw[5] : {2*n{1'bz}};
   assign bus = dtb && we[8] ? (-1'b1 << f) - dd[2] : {2*n{1'bz}};
-  assign bus = dtb && we[7] ? w[6] - dw[6] : {2*n{1'bz}};
-  assign bus = dtb && we[6] ? w[7] - dw[7] : {2*n{1'bz}};
-  assign bus = dtb && we[5] ? w[8] - dw[8] : {2*n{1'bz}};
-  assign bus = dtb && we[4] ? (-1'b1 << f) - dd[3] : {2*n{1'bz}};
-  assign bus = dtb && we[3] ? w[9] - dw[9] : {2*n{1'bz}};
-  assign bus = dtb && we[2] ? w[10] - dw[10] : {2*n{1'bz}};
-  assign bus = dtb && we[1] ? w[11] - dw[11] : {2*n{1'bz}};
-  assign bus = dtb && we[0] ? (-1'b1 << f) - dd[4] : {2*n{1'bz}};
+  
+  assign bus = dtb && we[9] ? w[6] - dw[6] : {2*n{1'bz}};
+  assign bus = dtb && we[10] ? w[7] - dw[7] : {2*n{1'bz}};
+  assign bus = dtb && we[11] ? w[8] - dw[8] : {2*n{1'bz}};
+  assign bus = dtb && we[12] ? (-1'b1 << f) - dd[3] : {2*n{1'bz}};
+  assign bus = dtb && we[13] ? w[9] - dw[9] : {2*n{1'bz}};
+  assign bus = dtb && we[14] ? w[10] - dw[10] : {2*n{1'bz}};
+  assign bus = dtb && we[15] ? w[11] - dw[11] : {2*n{1'bz}};
+  assign bus = dtb && we[16] ? (-1'b1 << f) - dd[4] : {2*n{1'bz}};
     
 endmodule

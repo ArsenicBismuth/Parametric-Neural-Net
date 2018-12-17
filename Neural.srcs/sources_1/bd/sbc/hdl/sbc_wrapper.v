@@ -1,7 +1,7 @@
 //Copyright 1986-2018 Xilinx, Inc. All Rights Reserved.
 //--------------------------------------------------------------------------------
 //Tool Version: Vivado v.2018.2 (win64) Build 2258646 Thu Jun 14 20:03:12 MDT 2018
-//Date        : Sun Dec 16 17:06:53 2018
+//Date        : Mon Dec 17 14:40:03 2018
 //Host        : Ab-1 running 64-bit major release  (build 9200)
 //Command     : generate_target sbc_wrapper.bd
 //Design      : sbc_wrapper

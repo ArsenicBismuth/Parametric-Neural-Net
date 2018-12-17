@@ -93,14 +93,14 @@ module control_unit(clk, rst, batch, x_addr, y_addr, t_addr, nd_addr, state, e_x
       
       ////////////////////////////////////////////// Init
       if (state == 3'd0) begin
-        $display("[[Start Loading]]");
         state = 3'd1;
         
         // Initialize for next state
         l = 1; d = 0; c = -1; // Start on first hidden layer for loading
         nd_addr = {n{1'b0}};
         
-        $display("\n[[[State-%1d]]]", state); 
+        $display("\n[[[State-%1d]]]", state);
+        $display("[[Start Loading]]"); 
       end
         
       ////////////////////////////////////////////// Load coeffs    
@@ -197,7 +197,7 @@ module control_unit(clk, rst, batch, x_addr, y_addr, t_addr, nd_addr, state, e_x
             
             // Save learning results
             state = 3'd4;
-            bp_we = 1'b1  << (wt+nd-1);
+            bp_we = {{(wt+nd-1){1'b0}} ,1'b1};
             dtb = 1'b1;           // to memory (through bus) instead of registers
             l = 1; d = 0; c = -1; // Start on first hidden layer for loading
             nd_addr = {n{1'b0}}; 
@@ -227,7 +227,7 @@ module control_unit(clk, rst, batch, x_addr, y_addr, t_addr, nd_addr, state, e_x
           $display("\n[[[State-%1d]]]", state);
         end else if ((d == ld-1) && (c == ldp+1-1)) begin
           // Until all layers
-          bp_we = bp_we >> 1; // Save for next coef
+          bp_we = bp_we << 1; // Save for next coef
           nd_addr = nd_addr + 1'd1;
           
           d = 0;
@@ -235,20 +235,20 @@ module control_unit(clk, rst, batch, x_addr, y_addr, t_addr, nd_addr, state, e_x
           l = l + 1;
         end else if (c == ldp+1-1) begin
           // Until all nodes in a layer
-          bp_we = bp_we >> 1; // Save for next coef
+          bp_we = bp_we << 1; // Save for next coef
           nd_addr = nd_addr + 1'd1;
           
           c = 0;
           d = d + 1;
         end else if (bp_we != {(wt+nd){1'b0}}) begin
           // Until all coefs in a node
-          bp_we = bp_we >> 1; // Save for next coef
+          bp_we = bp_we << 1; // Save for next coef
           nd_addr = nd_addr + 1'd1; // Increment node address
           
           c = c + 1;
         end else begin
           // Initalize writing here, compensating memory latency
-          bp_we = 1'b1 << ((wt+nd)-1);
+          bp_we = {{(wt+nd-1){1'b0}} ,1'b1};
           nd_addr = nd_addr + 1'd1;
         end
         
